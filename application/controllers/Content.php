@@ -35,6 +35,10 @@ class Content extends CI_Controller {
 				'a' => 'Minimum €25 (4 bonds). Maximum €250,000 (40,000 bonds) per person.',
 			),
 			array(
+				'q' => 'Is there a minimum holding period before I can cash in new bonds?',
+				'a' => 'Yes. Newly purchased Prize Bonds must be held for a minimum of 3 months (90 days) before they can be cashed in / repaid. This restriction is about cashing in only &mdash; it does not delay when a bond first becomes eligible for a draw. Bonds you receive automatically through reinvested prize winnings are exempt from this waiting period. See our <a href="' . base_url() . 'how-to-buy-and-cash-in">How to Buy and Cash In</a> guide for the full process.',
+			),
+			array(
 				'q' => 'How do I check if my numbers have won?',
 				'a' => 'Use our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool for up to 5 numbers at a time, or <a href="' . base_url() . 'search/power">Power Search</a> to paste a longer list. You can also browse every draw individually in the <a href="' . base_url() . 'results/archive">Draw Archive</a>.',
 			),
@@ -97,6 +101,29 @@ class Content extends CI_Controller {
 		$data['title'] = 'History of Irish Prize Bonds | Irish Prize Bonds';
 		$data['description'] = 'The history of Irish Prize Bonds from their 1957 launch to today: legislation, operators, and how the scheme has evolved.';
 		$this->load->view('history', $data);
+	}
+
+	public function buying_and_cashing_in()
+	{
+		$data['title'] = 'How to Buy and Cash In Irish Prize Bonds | Irish Prize Bonds';
+		$data['description'] = 'Step-by-step: how to buy Irish Prize Bonds online, by post office, or by phone, how first-time registration works, the 3-month rule before cashing in, and how to request repayment.';
+		$this->load->view('buying_and_cashing_in', $data);
+	}
+
+	public function worth_it()
+	{
+		$this->load->database();
+
+		$data['stats'] = $this->db->select(
+				"COUNT(*) as draw_count, MIN(draw_date) as first_date, MAX(draw_date) as last_date, SUM(total_prize_fund) as total_fund, SUM(total_prizes_count) as total_prizes"
+			)
+			->from('draws')->where('published', 1)->get()->row();
+
+		$data['winner_count'] = $this->db->select('COUNT(DISTINCT bond_number) as c')->from('draw_winners')->get()->row()->c;
+
+		$data['title'] = 'Are Irish Prize Bonds Worth It? | Irish Prize Bonds';
+		$data['description'] = 'A balanced, data-informed look at whether Irish Prize Bonds are worth it compared to an ordinary tax-free deposit account, using our own tracked draw results.';
+		$this->load->view('worth_it', $data);
 	}
 
 }

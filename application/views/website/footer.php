@@ -23,6 +23,8 @@
 					<h4>Learn</h4>
 					<ul>
 						<li><a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a></li>
+						<li><a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy &amp; Cash In</a></li>
+						<li><a href="<?php echo base_url(); ?>are-prize-bonds-worth-it/">Are They Worth It?</a></li>
 						<li><a href="<?php echo base_url(); ?>history/">History</a></li>
 						<li><a href="<?php echo base_url(); ?>faq/">FAQ</a></li>
 						<li><a href="<?php echo base_url(); ?>about/">About This Site</a></li>

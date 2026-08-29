@@ -24,7 +24,7 @@ class Antelope extends CI_Model {
     $xcrud->label('total_prizes_count','Total Prizes');
     $xcrud->label('auto_import','Auto-Import?');
 
-    $tiers = $xcrud->nested_table('Prize Tiers','draw_id','draw_prize_tiers','draw_id');
+    $tiers = $xcrud->nested_table('Prize Tiers','id','draw_prize_tiers','draw_id');
     $tiers->fields('prize_value,prize_count,sort_order');
     $tiers->columns('prize_value,prize_count,sort_order');
     $tiers->label('prize_value','Prize Value (€)')->label('prize_count','Number of Prizes')->label('sort_order','Sort Order');

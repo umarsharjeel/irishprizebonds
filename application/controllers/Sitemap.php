@@ -22,6 +22,8 @@ class Sitemap extends CI_Controller {
 			'stats/counties' => '0.7',
 			'stats/odds' => '0.7',
 			'how-it-works' => '0.7',
+			'how-to-buy-and-cash-in' => '0.6',
+			'are-prize-bonds-worth-it' => '0.6',
 			'history' => '0.6',
 			'faq' => '0.7',
 			'about' => '0.4',

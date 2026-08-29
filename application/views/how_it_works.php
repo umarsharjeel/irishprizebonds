@@ -10,7 +10,10 @@
 			A Prize Bond is a savings product issued by the Prize Bond Company on behalf of the Irish government (via the NTMA and An Post).
 			Instead of earning interest, every bond you hold is automatically entered into a weekly draw for a chance to win a tax-free cash prize.
 			You can buy from as little as &euro;25 (4 bonds) up to a maximum of &euro;250,000 (40,000 bonds) per person, and your original money
-			stays yours &mdash; you can cash bonds in at any time, whether or not they've ever won.
+			stays yours &mdash; you can cash bonds in at any time, whether or not they've ever won, subject to one rule: newly purchased bonds
+			must be held for a <strong>minimum of 3 months (90 days)</strong> before they can be cashed in. That waiting period applies to
+			encashment only, not to draw entry, and it doesn't apply to bonds you receive automatically through reinvested prize winnings.
+			See our <a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy and Cash In</a> guide for the full process.
 		</p>
 
 		<h2>The weekly draw</h2>
@@ -79,8 +82,11 @@
 
 		<h2>Buying, cashing in, and more</h2>
 		<p>
-			This site is a results checker only &mdash; we don't sell bonds or process claims. For buying bonds, cashing them in,
-			or claiming a prize, use the official site at <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a>.
+			This site is a results checker only &mdash; we don't sell bonds or process claims. All buying, registration, and cashing-in
+			happens through the official site at <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a>
+			or your local Post Office. We've laid out exactly how that process works, step by step, in our own
+			<a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy and Cash In</a> guide, and if you're weighing Prize Bonds
+			against an ordinary savings account, see <a href="<?php echo base_url(); ?>are-prize-bonds-worth-it/">Are Prize Bonds Worth It?</a>
 			See also our <a href="<?php echo base_url(); ?>faq/">FAQ</a> for more specific questions.
 		</p>
 	</div>
