@@ -1,0 +1,63 @@
+{
+  "antelope_standalone": true,
+  "antelope_brand_name": "Irish Prize Bonds",
+  "antelope_custom_theme": false,
+  "antelope_theme_color_primary": "#FF5722",
+  "antelope_theme_color_primary_text": "#256069",
+  "antelope_theme_color_secondary": "#607D8B",
+  "antelope_theme_color_secondary_text": "#ECEFF1",
+  "antelope_sidebar_menus": [
+   {
+    "title": "Overview",
+    "icon": "mdi mdi-view-dashboard",
+    "url": "overview",
+    "sub_menus": null
+  },
+  {
+    "title": "Draws",
+    "icon": "fa fa-calendar",
+    "url": "dashboard/table/draws",
+    "sub_menus": null
+  },
+  {
+    "title": "Winners",
+    "icon": "mdi mdi-trophy",
+    "url": null,
+    "sub_menus": [
+      {
+        "title": "Import Winners",
+        "icon": "",
+        "url": "dashboard/import_winners"
+      },
+      {
+        "title": "All Winners",
+        "icon": "",
+        "url": "dashboard/table/draw_winners"
+      },
+      {
+        "title": "Auto-Import Progress",
+        "icon": "",
+        "url": "dashboard/table/import_progress"
+      }
+    ]
+  },
+  {
+    "title": "Locations",
+    "icon": "mdi mdi-map-marker",
+    "url": "dashboard/table/locations",
+    "sub_menus": null
+  },
+  {
+    "title": "Contacts",
+    "icon": "mdi mdi-email",
+    "url": "dashboard/table/contacts",
+    "sub_menus": null
+  },
+  {
+    "title": "Dashboard Users",
+    "icon": "mdi mdi-account-multiple",
+    "url": "dashboard/table/user_management",
+    "sub_menus": null
+  }
+]
+}
