@@ -17,7 +17,7 @@
 		</div>
 	<?php endif; ?>
 
-	<a href="<?php echo base_url(); ?>results/archive" class="btn btn-default">&laquo; Back to Draw Archive</a>
+	<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-default">&laquo; Back to Draw Archive</a>
 </div>
 
 <?php $this->load->view('website/footer'); ?>

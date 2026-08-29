@@ -8,9 +8,9 @@
 			<?php if ($draw->is_jackpot): ?><span class="badge badge-jackpot">Jackpot</span><?php endif; ?>
 		</h1>
 		<div style="text-align:right;">
-			<?php if ($prev_draw): ?><a href="<?php echo base_url(); ?>results/view/<?php echo $prev_draw->draw_date; ?>">&laquo; Previous Draw</a><?php endif; ?>
+			<?php if ($prev_draw): ?><a href="<?php echo base_url(); ?>results/view/<?php echo $prev_draw->draw_date; ?>/">&laquo; Previous Draw</a><?php endif; ?>
 			<?php if ($prev_draw && $next_draw): ?> &nbsp;|&nbsp; <?php endif; ?>
-			<?php if ($next_draw): ?><a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>">Next Draw &raquo;</a><?php endif; ?>
+			<?php if ($next_draw): ?><a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/">Next Draw &raquo;</a><?php endif; ?>
 		</div>
 	</div>
 
@@ -46,7 +46,7 @@
 			</tbody>
 		</table>
 	</div>
-	<p class="text-muted">Not sure what these prize tiers mean? Read <a href="<?php echo base_url(); ?>how-it-works">How Prize Bonds Work</a>, or try our <a href="<?php echo base_url(); ?>stats/odds">Odds Calculator</a> to see your own chances.</p>
+	<p class="text-muted">Not sure what these prize tiers mean? Read <a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a>, or try our <a href="<?php echo base_url(); ?>stats/odds/">Odds Calculator</a> to see your own chances.</p>
 
 	<h2>Winners</h2>
 
@@ -77,7 +77,7 @@
 			<button type="submit" class="btn btn-primary">Apply</button>
 		</div>
 		<div class="form-row">
-			<a href="<?php echo base_url(); ?>results/view/<?php echo $draw->draw_date; ?>" class="btn btn-default">Reset</a>
+			<a href="<?php echo base_url(); ?>results/view/<?php echo $draw->draw_date; ?>/" class="btn btn-default">Reset</a>
 		</div>
 	</form>
 
@@ -126,8 +126,8 @@
 
 	<p class="text-muted">
 		Don't see your numbers here? Check them across every draw with our
-		<a href="<?php echo base_url(); ?>search/checker">Prize Bond Checker</a> or
-		<a href="<?php echo base_url(); ?>search/power">Power Search</a>.
+		<a href="<?php echo base_url(); ?>search/checker/">Prize Bond Checker</a> or
+		<a href="<?php echo base_url(); ?>search/power/">Power Search</a>.
 	</p>
 
 </div>

@@ -14,7 +14,7 @@
 		</p>
 
 		<h2>The weekly draw</h2>
-		<p>A draw is held every week — see the full <a href="<?php echo base_url(); ?>schedule">draw schedule</a> for upcoming dates. In a typical week, the prize tiers are:</p>
+		<p>A draw is held every week — see the full <a href="<?php echo base_url(); ?>schedule/">draw schedule</a> for upcoming dates. In a typical week, the prize tiers are:</p>
 		<div class="table-wrap" style="max-width:480px;">
 			<table class="data-table">
 				<thead><tr><th>Prize</th><th>Number of Winners</th></tr></thead>
@@ -43,8 +43,8 @@
 		<p>
 			Each individual bond you own has its own unique number &mdash; a short letter prefix followed by a six-digit number
 			(for example <code>AHU176759</code>). If you hold multiple bonds, you have multiple numbers, and each one is entered
-			separately into every draw. You can check any of your numbers on our <a href="<?php echo base_url(); ?>search/checker">Check Numbers</a>
-			or <a href="<?php echo base_url(); ?>search/power">Power Search</a> pages.
+			separately into every draw. You can check any of your numbers on our <a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a>
+			or <a href="<?php echo base_url(); ?>search/power/">Power Search</a> pages.
 		</p>
 
 		<h2>Odds of winning</h2>
@@ -54,7 +54,7 @@
 			holding to win the top prize in a given draw, improving to roughly 1 in 350,000 for a &euro;10,000 holding &mdash;
 			but more bonds means more numbers in the draw, so your overall odds of winning <em>something</em> (including a &euro;75 prize)
 			over a year are considerably better than any single-prize figure suggests. Try our
-			<a href="<?php echo base_url(); ?>stats/odds">odds calculator</a> for an estimate based on your own holding.
+			<a href="<?php echo base_url(); ?>stats/odds/">odds calculator</a> for an estimate based on your own holding.
 		</p>
 
 		<h2>Tax treatment</h2>
@@ -74,14 +74,14 @@
 			Prize Bonds have been part of Irish state savings since 1957, making them one of the longest-running savings
 			products in the country. The scheme is run by the Prize Bond Company on behalf of the Minister for Finance,
 			with An Post handling day-to-day administration through Ireland State Savings. Read the
-			<a href="<?php echo base_url(); ?>history">full history</a> for the complete timeline.
+			<a href="<?php echo base_url(); ?>history/">full history</a> for the complete timeline.
 		</p>
 
 		<h2>Buying, cashing in, and more</h2>
 		<p>
 			This site is a results checker only &mdash; we don't sell bonds or process claims. For buying bonds, cashing them in,
 			or claiming a prize, use the official site at <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a>.
-			See also our <a href="<?php echo base_url(); ?>faq">FAQ</a> for more specific questions.
+			See also our <a href="<?php echo base_url(); ?>faq/">FAQ</a> for more specific questions.
 		</p>
 	</div>
 </div>

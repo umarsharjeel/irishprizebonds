@@ -49,8 +49,8 @@
 		<p>
 			Nearly 70 years after the first bonds went on sale, Prize Bonds remain one of Ireland's most recognisable
 			savings products: weekly draws, a monthly &euro;500,000 jackpot, and winnings that are still entirely tax-free.
-			See <a href="<?php echo base_url(); ?>how-it-works">How Prize Bonds Work</a> for how the modern scheme operates,
-			or browse the <a href="<?php echo base_url(); ?>results/archive">Draw Archive</a> for recent results.
+			See <a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a> for how the modern scheme operates,
+			or browse the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for recent results.
 		</p>
 
 		<p class="text-muted">

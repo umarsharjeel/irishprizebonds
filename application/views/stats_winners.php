@@ -30,7 +30,7 @@
 				<?php endif; ?>
 				<?php foreach ($winners as $w): ?>
 					<tr>
-						<td><a href="<?php echo base_url(); ?>results/view/<?php echo $w->draw_date; ?>"><?php echo date('d M Y', strtotime($w->draw_date)); ?></a></td>
+						<td><a href="<?php echo base_url(); ?>results/view/<?php echo $w->draw_date; ?>/"><?php echo date('d M Y', strtotime($w->draw_date)); ?></a></td>
 						<td>
 							&euro;<?php echo number_format($w->prize_value); ?>
 							<?php if ($w->prize_value >= 500000): ?><span class="badge badge-jackpot">Jackpot</span><?php endif; ?>
@@ -60,8 +60,8 @@
 	<?php endif; ?>
 
 	<p class="text-muted">
-		See where the big prizes have landed with <a href="<?php echo base_url(); ?>stats/counties">County Stats</a>,
-		or find out your own odds with the <a href="<?php echo base_url(); ?>stats/odds">Odds Calculator</a>.
+		See where the big prizes have landed with <a href="<?php echo base_url(); ?>stats/counties/">County Stats</a>,
+		or find out your own odds with the <a href="<?php echo base_url(); ?>stats/odds/">Odds Calculator</a>.
 	</p>
 </div>
 

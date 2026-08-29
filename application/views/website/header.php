@@ -55,32 +55,32 @@
 				<a href="<?php echo base_url(); ?>">Home</a>
 
 				<div class="nav-dropdown">
-					<a href="<?php echo base_url(); ?>results/archive">Results &#9662;</a>
+					<a href="<?php echo base_url(); ?>results/archive/">Results &#9662;</a>
 					<div class="nav-dropdown-menu">
-						<a href="<?php echo base_url(); ?>results/archive">Draw Archive</a>
-						<a href="<?php echo base_url(); ?>schedule">Draw Dates</a>
-						<a href="<?php echo base_url(); ?>search/checker">Check Numbers</a>
-						<a href="<?php echo base_url(); ?>search/power">Power Search</a>
+						<a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>
+						<a href="<?php echo base_url(); ?>schedule/">Draw Dates</a>
+						<a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a>
+						<a href="<?php echo base_url(); ?>search/power/">Power Search</a>
 					</div>
 				</div>
 
 				<div class="nav-dropdown">
-					<a href="<?php echo base_url(); ?>stats/winners">Insights &#9662;</a>
+					<a href="<?php echo base_url(); ?>stats/winners/">Insights &#9662;</a>
 					<div class="nav-dropdown-menu">
-						<a href="<?php echo base_url(); ?>stats/winners">Big Winners</a>
-						<a href="<?php echo base_url(); ?>stats/counties">County Stats</a>
-						<a href="<?php echo base_url(); ?>stats/odds">Odds Calculator</a>
+						<a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a>
+						<a href="<?php echo base_url(); ?>stats/counties/">County Stats</a>
+						<a href="<?php echo base_url(); ?>stats/odds/">Odds Calculator</a>
 					</div>
 				</div>
 
 				<div class="nav-dropdown">
-					<a href="<?php echo base_url(); ?>how-it-works">Learn &#9662;</a>
+					<a href="<?php echo base_url(); ?>how-it-works/">Learn &#9662;</a>
 					<div class="nav-dropdown-menu">
-						<a href="<?php echo base_url(); ?>how-it-works">How It Works</a>
-						<a href="<?php echo base_url(); ?>history">History</a>
-						<a href="<?php echo base_url(); ?>faq">FAQ</a>
-						<a href="<?php echo base_url(); ?>about">About</a>
-						<a href="<?php echo base_url(); ?>contact-us">Contact Us</a>
+						<a href="<?php echo base_url(); ?>how-it-works/">How It Works</a>
+						<a href="<?php echo base_url(); ?>history/">History</a>
+						<a href="<?php echo base_url(); ?>faq/">FAQ</a>
+						<a href="<?php echo base_url(); ?>about/">About</a>
+						<a href="<?php echo base_url(); ?>contact-us/">Contact Us</a>
 					</div>
 				</div>
 			</nav>

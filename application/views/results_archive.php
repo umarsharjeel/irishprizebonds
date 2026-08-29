@@ -40,7 +40,7 @@
 	<?php if (!empty($months)): ?>
 	<p>
 		<?php foreach ($months as $ym => $count): ?>
-			<a href="<?php echo base_url(); ?>results/month/<?php echo $ym; ?>" class="btn btn-default btn-sm" style="margin:0 6px 6px 0; display:inline-block;"><?php echo date('M Y', strtotime($ym . '-01')); ?></a>
+			<a href="<?php echo base_url(); ?>results/month/<?php echo $ym; ?>/" class="btn btn-default btn-sm" style="margin:0 6px 6px 0; display:inline-block;"><?php echo date('M Y', strtotime($ym . '-01')); ?></a>
 		<?php endforeach; ?>
 	</p>
 	<?php endif; ?>
@@ -64,7 +64,7 @@
 				<?php foreach ($draws as $d): ?>
 					<tr>
 						<td>
-							<a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>"><?php echo date('d M Y', strtotime($d->draw_date)); ?></a>
+							<a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/"><?php echo date('d M Y', strtotime($d->draw_date)); ?></a>
 							<?php if ($d->is_jackpot): ?><span class="badge badge-jackpot">Jackpot</span><?php endif; ?>
 						</td>
 						<?php if ($d->published): ?>
@@ -82,7 +82,7 @@
 								<?php endif; ?>
 							</td>
 						<?php endif; ?>
-						<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>" class="btn btn-default btn-sm">View</a></td>
+						<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/" class="btn btn-default btn-sm">View</a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

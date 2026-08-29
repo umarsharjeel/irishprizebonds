@@ -22,7 +22,7 @@
 		<?php endif; ?>
 
 		<div class="card" style="max-width:520px;">
-			<form method="post" action="<?php echo base_url(); ?>contact-us/submit">
+			<form method="post" action="<?php echo base_url(); ?>contact-us/submit/">
 				<div class="form-row">
 					<label>Name</label>
 					<input type="text" name="name" value="<?php echo htmlspecialchars($old['name']); ?>" required>

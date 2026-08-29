@@ -37,15 +37,16 @@ class Sitemap extends CI_Controller {
 		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
 		foreach ($static_pages as $path => $priority) {
-			echo '<url><loc>' . base_url($path) . '</loc><priority>' . $priority . '</priority></url>' . "\n";
+			$loc = $path === '' ? base_url() : base_url($path . '/');
+			echo '<url><loc>' . $loc . '</loc><priority>' . $priority . '</priority></url>' . "\n";
 		}
 
 		foreach ($months as $m) {
-			echo '<url><loc>' . base_url('results/month/' . $m->ym) . '</loc><priority>0.6</priority></url>' . "\n";
+			echo '<url><loc>' . base_url('results/month/' . $m->ym . '/') . '</loc><priority>0.6</priority></url>' . "\n";
 		}
 
 		foreach ($draws as $d) {
-			echo '<url><loc>' . base_url('results/view/' . $d->draw_date) . '</loc>';
+			echo '<url><loc>' . base_url('results/view/' . $d->draw_date . '/') . '</loc>';
 			if ($d->updated_at) {
 				echo '<lastmod>' . date('Y-m-d', strtotime($d->updated_at)) . '</lastmod>';
 			}

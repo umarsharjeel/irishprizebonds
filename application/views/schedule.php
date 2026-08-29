@@ -20,7 +20,7 @@
 					<?php endif; ?>
 					<?php foreach ($upcoming as $d): ?>
 						<tr>
-							<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>"><?php echo date('l, d F Y', strtotime($d->draw_date)); ?></a></td>
+							<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/"><?php echo date('l, d F Y', strtotime($d->draw_date)); ?></a></td>
 							<td><?php echo $d->is_jackpot ? '<span class="badge badge-jackpot">Jackpot (€500,000)</span>' : 'Regular (€50,000 top prize)'; ?></td>
 						</tr>
 					<?php endforeach; ?>
@@ -36,8 +36,8 @@
 		</ul>
 
 		<p>
-			See the full <a href="<?php echo base_url(); ?>results/archive">Draw Archive</a> for past results, or read
-			<a href="<?php echo base_url(); ?>how-it-works">How Prize Bonds Work</a> for the complete picture.
+			See the full <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for past results, or read
+			<a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a> for the complete picture.
 		</p>
 	</div>
 </div>

@@ -103,7 +103,7 @@
   <div id="wrapper">
     <div class="topbar">
       <div class="topbar-left">
-          <div class="text-center"> <a href="<?php echo base_url() ?>overview" class="logo"><?php echo $this->config->item("antelope_config")["antelope_brand_name"] ?></a> <a href="<?php echo base_url() ?>/dashboard/overview" class="logo-sm"><span><?php echo substr(antelope_config()["antelope_brand_name"],0,1) ?></span></a>
+          <div class="text-center"> <a href="<?php echo base_url() ?>overview/" class="logo"><?php echo $this->config->item("antelope_config")["antelope_brand_name"] ?></a> <a href="<?php echo base_url() ?>dashboard/overview/" class="logo-sm"><span><?php echo substr(antelope_config()["antelope_brand_name"],0,1) ?></span></a>
           </div>
       </div>
       <div class="navbar navbar-default" role="navigation">
@@ -159,14 +159,14 @@
                       <li class="dropdown">
                           <a href="" class="dropdown-toggle profile waves-effect waves-lightx" data-toggle="dropdown" aria-expanded="true"> <img src="<?php echo get_user()["avatar"] ?>" alt="user-img" class="img-circle"> <span class="profile-username"><?php echo get_user()["name"] ?> <br/> <small><?php echo get_user()['user_type'] ?></small> </span> </a>
                           <ul class="dropdown-menu">
-                              <li><a href="<?php echo base_url() ?>dashboard/table/my_profile">My Profile</a>
+                              <li><a href="<?php echo base_url() ?>dashboard/table/my_profile/">My Profile</a>
                               </li>
                               <!-- <li><a href="javascript:void(0)"><span class="badge badge-success pull-right">5</span> Settings </a>
                               </li>
                               <li><a href="javascript:void(0)"> Lock screen</a>
                               </li> -->
                               <li class="divider"></li>
-                              <li><a href="<?php echo base_url() ?>user_management/logout"> Logout</a>
+                              <li><a href="<?php echo base_url() ?>user_management/logout/"> Logout</a>
                               </li>
                           </ul>
                       </li>

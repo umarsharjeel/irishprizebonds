@@ -32,7 +32,7 @@
 
 
 <li class="<?php echo ($value["sub_menus"]) ? ' has_sub ' : ''; ?>">
-  <a href="<?php echo ($value["url"]) ?  base_url(). $value["url"] : 'javascript:void(0);' ?>" class=" waves-effect <?php echo ($select_this) ? ' active subdrop' : ''; ?>">
+  <a href="<?php echo ($value["url"]) ?  base_url(). $value["url"] . '/' : 'javascript:void(0);' ?>" class=" waves-effect <?php echo ($select_this) ? ' active subdrop' : ''; ?>">
     <i class="<?php echo $value["icon"] ?>"></i>
     <span> <?php echo $value["title"] ?></span>
 

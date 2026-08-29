@@ -48,8 +48,8 @@
 	</div>
 
 	<p class="text-muted">
-		See who's won the biggest prizes on the <a href="<?php echo base_url(); ?>stats/winners">Big Winners</a> page,
-		or read <a href="<?php echo base_url(); ?>how-it-works">How Prize Bonds Work</a> for the full picture.
+		See who's won the biggest prizes on the <a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a> page,
+		or read <a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a> for the full picture.
 	</p>
 </div>
 

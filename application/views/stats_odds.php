@@ -45,7 +45,7 @@
 			actual odds shift slightly month to month as the total pool of bonds and the prize fund change.
 		</p>
 		<p>
-			This is a probability estimate, not financial advice. See <a href="<?php echo base_url(); ?>how-it-works">How Prize Bonds Work</a> for the full picture.
+			This is a probability estimate, not financial advice. See <a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a> for the full picture.
 		</p>
 	</div>
 </div>

@@ -34,7 +34,7 @@
 							<tr>
 								<td><?php echo htmlspecialchars($r->bond_number); ?></td>
 								<td>&euro;<?php echo number_format($r->prize_value, 2); ?></td>
-								<td><a href="<?php echo base_url(); ?>results/view/<?php echo $r->draw_date; ?>"><?php echo date('d F Y', strtotime($r->draw_date)); ?></a></td>
+								<td><a href="<?php echo base_url(); ?>results/view/<?php echo $r->draw_date; ?>/"><?php echo date('d F Y', strtotime($r->draw_date)); ?></a></td>
 								<td><?php echo $r->location ? htmlspecialchars($r->location) : '&mdash;'; ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -45,8 +45,8 @@
 	<?php endif; ?>
 
 	<p class="text-muted">
-		Just checking a few numbers? Try the simpler <a href="<?php echo base_url(); ?>search/checker">Prize Bond Checker</a>,
-		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive">Draw Archive</a>.
+		Just checking a few numbers? Try the simpler <a href="<?php echo base_url(); ?>search/checker/">Prize Bond Checker</a>,
+		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
 	</p>
 </div>
 
