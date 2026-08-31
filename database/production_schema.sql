@@ -126,6 +126,19 @@ CREATE TABLE `draw_import_progress` (
   CONSTRAINT `draw_import_progress_draw_id_fk` FOREIGN KEY (`draw_id`) REFERENCES `draws` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+
+-- Small key/value store for cron bookkeeping (currently just the timestamp of the
+-- last live statesavings.ie check — see Cron::_live_check_due()). Deliberately
+-- generic (name/value) rather than a single dedicated column, so future cron
+-- state can reuse it without another migration.
+CREATE TABLE `cron_state` (
+  `name` varchar(50) NOT NULL,
+  `value` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

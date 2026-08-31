@@ -14,6 +14,17 @@ class Cron extends CI_Controller {
 	// entire run's budget every run, starving every other pending pair.
 	const MAX_REPAIR_PAGES_PER_PAIR = 20;
 
+	// Now that backfill is complete, most cron runs have nothing new to find —
+	// a new draw is only ever confirmed roughly once a week. Checking
+	// statesavings.ie's results listing and homepage banner every single
+	// minute (if that's the cron's schedule) is needless load on their site
+	// for essentially always-empty results. Only actually check live once
+	// this long has passed since the last check — unless a draw is mid-import
+	// (see the auto_import=1-but-not-yet-published exception in
+	// import_results()), in which case we always check, every run, to keep
+	// that import moving.
+	const LIVE_CHECK_INTERVAL_SECONDS = 1800; // 30 minutes
+
 	function __construct()
 	{
 		parent::__construct();
@@ -52,24 +63,38 @@ class Cron extends CI_Controller {
 		// the whole locations table fresh.
 		$location_map = $this->_get_location_map();
 
-		// The only place *confirmed* draw rows get created for the real site — see
-		// the docblock on _seed_placeholder_draw_rows_for_dummy_data() for why we
-		// don't guess draw dates ahead of time any more. Gated by $budget like
-		// every other request-issuing step below, so a very low configured
-		// budget (e.g. 1) can't still cost more requests than it allows.
-		if ($budget > 0) {
-			$confirmed = $this->_confirm_available_draws();
-			$budget -= 1; // that confirmation check costs one request
-			if ($confirmed > 0) {
-				echo "Confirmed {$confirmed} draw(s) now listed on statesavings.ie — enabled for import.\n";
+		// Whether to actually hit statesavings.ie to check for a new draw this run.
+		// Always check if something is already confirmed but not yet fully
+		// imported (auto_import=1, published=0) — we need to keep making progress
+		// on that regardless of the throttle. Otherwise, only check once
+		// LIVE_CHECK_INTERVAL_SECONDS has passed since the last check.
+		$do_live_check = ($this->_get_active_draw() !== null) || $this->_live_check_due();
+
+		if ($do_live_check) {
+			// The only place *confirmed* draw rows get created for the real site —
+			// see the docblock on _seed_placeholder_draw_rows_for_dummy_data() for
+			// why we don't guess draw dates ahead of time any more. Gated by
+			// $budget like every other request-issuing step below, so a very low
+			// configured budget (e.g. 1) can't still cost more requests than it allows.
+			if ($budget > 0) {
+				$confirmed = $this->_confirm_available_draws();
+				$budget -= 1; // that confirmation check costs one request
+				if ($confirmed > 0) {
+					echo "Confirmed {$confirmed} draw(s) now listed on statesavings.ie — enabled for import.\n";
+				}
 			}
+
+			if ($budget > 0) {
+				$this->_sync_next_draw_preview();
+				$budget -= 1;
+			}
+
+			$this->_mark_live_check_done();
+		} else {
+			echo "Skipping live statesavings.ie check — checked recently and nothing is actively importing.\n";
 		}
 
-		if ($budget > 0) {
-			$this->_sync_next_draw_preview();
-			$budget -= 1;
-		}
-
+		// Re-fetch: a live check just above may have newly confirmed a draw.
 		$draw = $this->_get_active_draw();
 		if (!$draw) {
 			echo "Nothing to do — all past draws are already imported.\n";
@@ -493,6 +518,45 @@ class Cron extends CI_Controller {
 			->where('auto_import', 1)->where('published', 0)
 			->where('draw_date <=', date('Y-m-d'))
 			->order_by('draw_date', 'asc')->limit(1)->get()->row();
+	}
+
+	/**
+	 * True if it's been at least LIVE_CHECK_INTERVAL_SECONDS since the last
+	 * live statesavings.ie check (or we've never recorded one). Defensively
+	 * returns true — i.e. "always check" — if the cron_state table doesn't
+	 * exist yet (e.g. this code deployed before the migration ran), so a
+	 * missed schema update never silently stalls the whole import pipeline;
+	 * it just means the throttle doesn't kick in until the table exists.
+	 */
+	private function _live_check_due()
+	{
+		if (!$this->db->table_exists('cron_state')) {
+			return true;
+		}
+		// The whole "how long ago" comparison happens inside MySQL, using its own
+		// NOW() on both the stored value and the comparison — deliberately never
+		// mixes it with PHP's time()/date(), since the two can (and here, do) run
+		// in different timezones (this environment: PHP is UTC, MySQL server is
+		// UTC+5) — comparing across that gap would silently throttle wrong by
+		// however many hours the two clocks disagree by.
+		$row = $this->db->query(
+			"SELECT (value IS NULL OR value < NOW() - INTERVAL " . self::LIVE_CHECK_INTERVAL_SECONDS . " SECOND) as due
+			 FROM cron_state WHERE name = 'last_live_check'"
+		)->row();
+		if (!$row) {
+			return true; // no row yet at all — never checked
+		}
+		return (bool) $row->due;
+	}
+
+	private function _mark_live_check_done()
+	{
+		if (!$this->db->table_exists('cron_state')) {
+			return;
+		}
+		$this->db->query(
+			"INSERT INTO cron_state (name, value) VALUES ('last_live_check', NOW()) ON DUPLICATE KEY UPDATE value = NOW()"
+		);
 	}
 
 	private function _get_location_map()
