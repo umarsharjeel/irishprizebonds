@@ -4,22 +4,33 @@
 	<h1>Power Search</h1>
 	<p class="lead-paragraph">
 		If you hold more than a handful of bonds, checking them one at a time gets tedious fast — Power Search lets
-		you paste a whole list at once (one per line, or separated by commas/spaces, up to 500 numbers) and we'll
+		you paste a whole list at once (one per line, or separated by commas/spaces, up to 5,000 numbers) and we'll
 		check every one against every draw result we have on file in a single pass. Useful if you've built up a
 		holding over several purchases and want to check the lot after each draw.
+	</p>
+	<p class="lead-paragraph">
+		You can mix in ranges too — a token like <code>AHU176720-AHU176759</code> (or the shorthand
+		<code>AHU176720-176759</code>) expands to every number in that block, so a whole certificate's worth of
+		consecutively-numbered bonds is one line, not forty.
 	</p>
 
 	<div class="card">
 		<form method="post">
 			<div class="form-row">
-				<textarea name="list" rows="8" placeholder="AHU176759&#10;BDY424458&#10;AYR077005"><?php echo htmlspecialchars($list); ?></textarea>
+				<textarea name="list" rows="8" placeholder="AHU176759&#10;BDY424458-BDY424478&#10;AYR077005"><?php echo htmlspecialchars($list); ?></textarea>
 			</div>
 			<button type="submit" name="do_search" value="1" class="btn btn-primary">Search</button>
 		</form>
 	</div>
 
+	<?php if (!empty($errors)): ?>
+		<div class="alert alert-warning">
+			<?php foreach ($errors as $e): ?><div><?php echo htmlspecialchars($e); ?></div><?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+
 	<?php if ($results !== null): ?>
-		<p class="text-muted"><?php echo $searched_count; ?> number(s) searched.</p>
+		<p class="text-muted"><?php echo number_format($searched_count); ?> number(s) searched.</p>
 		<?php if (empty($results)): ?>
 			<div class="alert alert-info">No prizes found for the numbers entered.</div>
 		<?php else: ?>

@@ -8,18 +8,36 @@
 		followed by six digits, e.g. <code>AHU176759</code>) and its own independent chance to win in every draw,
 		so it's worth checking each number you hold, not just one.
 	</p>
+	<p class="lead-paragraph">
+		Hold a block of consecutively-numbered bonds on one certificate? Fill in the optional <strong>Last Bond
+		Number</strong> next to any row and we'll check the whole range for you — no need to type out every number
+		individually.
+	</p>
 
 	<div class="card">
 		<form method="post">
-			<div class="number-grid">
+			<div class="checker-range-grid">
+				<div class="checker-range-head">
+					<span>Bond Number</span>
+					<span>Last Bond Number <span class="text-muted">(optional &mdash; checks the whole range)</span></span>
+				</div>
 				<?php for ($i = 0; $i < 5; $i++): ?>
-					<input type="text" name="number_<?php echo $i; ?>" placeholder="e.g. AHU176759" value="<?php echo htmlspecialchars($numbers[$i]); ?>">
+					<div class="checker-range-row">
+						<input type="text" name="first_<?php echo $i; ?>" placeholder="e.g. AHU176759" aria-label="Bond number <?php echo $i + 1; ?>" value="<?php echo htmlspecialchars($slots[$i]['first']); ?>">
+						<input type="text" name="last_<?php echo $i; ?>" placeholder="optional, e.g. AHU176780" aria-label="Last bond number for range <?php echo $i + 1; ?>" value="<?php echo htmlspecialchars($slots[$i]['last']); ?>">
+					</div>
 				<?php endfor; ?>
 			</div>
 			<br>
 			<button type="submit" name="do_check" value="1" class="btn btn-primary">Check Numbers</button>
 		</form>
 	</div>
+
+	<?php if (!empty($errors)): ?>
+		<div class="alert alert-warning">
+			<?php foreach ($errors as $e): ?><div><?php echo htmlspecialchars($e); ?></div><?php endforeach; ?>
+		</div>
+	<?php endif; ?>
 
 	<?php if ($results !== null): ?>
 		<?php if (empty($results)): ?>
@@ -47,7 +65,7 @@
 	<?php endif; ?>
 
 	<p class="text-muted">
-		Checking more than five numbers? Use <a href="<?php echo base_url(); ?>search/power/">Power Search</a> to paste a longer list,
+		Checking more than five numbers or ranges? Use <a href="<?php echo base_url(); ?>search/power/">Power Search</a> to paste a longer list,
 		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
 	</p>
 </div>

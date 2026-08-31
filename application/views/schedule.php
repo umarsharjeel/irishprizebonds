@@ -10,23 +10,23 @@
 			that month is a regular draw with a &euro;50,000 top prize.
 		</p>
 
-		<h2>Next Scheduled Draws</h2>
-		<div class="table-wrap" style="max-width:500px;">
-			<table class="data-table">
-				<thead><tr><th>Draw Date</th><th>Type</th></tr></thead>
-				<tbody>
-					<?php if (empty($upcoming)): ?>
-						<tr><td colspan="2">No upcoming draws scheduled yet.</td></tr>
-					<?php endif; ?>
-					<?php foreach ($upcoming as $d): ?>
-						<tr>
-							<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/"><?php echo date('l, d F Y', strtotime($d->draw_date)); ?></a></td>
-							<td><?php echo $d->is_jackpot ? '<span class="badge badge-jackpot">Jackpot (€500,000)</span>' : 'Regular (€50,000 top prize)'; ?></td>
-						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		</div>
+		<h2>Next Draw</h2>
+		<?php if ($next_draw): ?>
+			<p>
+				The next Prize Bond draw is <strong><?php echo date('l, d F Y', strtotime($next_draw->draw_date)); ?></strong>
+				<?php if ($next_draw->is_jackpot): ?>
+					&mdash; a <strong>jackpot draw</strong>, with a &euro;500,000 top prize on top of the usual tiers.
+				<?php else: ?>
+					&mdash; a regular draw, with a &euro;50,000 top prize.
+				<?php endif; ?>
+				Confirmed straight from statesavings.ie's own published schedule.
+			</p>
+			<p>
+				<a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/" class="btn btn-primary">View this draw</a>
+			</p>
+		<?php else: ?>
+			<p class="text-muted">We don't have a confirmed next draw date right now — check back shortly, or see the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for the latest results.</p>
+		<?php endif; ?>
 
 		<h2>How the schedule works</h2>
 		<ul>

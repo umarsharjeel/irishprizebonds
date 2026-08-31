@@ -11,18 +11,42 @@ class Search extends CI_Controller {
 	public function checker()
 	{
 		$data['title'] = 'Check Your Prize Bond Numbers | Irish Prize Bonds';
-		$data['description'] = 'Check up to five Prize Bond numbers against all published draw results.';
-		$data['numbers'] = array('', '', '', '', '');
+		$data['description'] = 'Check up to five Prize Bond numbers — or whole ranges from a single certificate — against all published draw results.';
+		$data['slots'] = array();
+		for ($i = 0; $i < 5; $i++) {
+			$data['slots'][$i] = array('first' => '', 'last' => '');
+		}
 		$data['results'] = null;
+		$data['errors'] = array();
 
 		if ($this->input->post('do_check')) {
-			$numbers = array();
+			$clean = array();
 			for ($i = 0; $i < 5; $i++) {
-				$numbers[$i] = strtoupper(trim((string) $this->input->post('number_' . $i)));
-			}
-			$data['numbers'] = $numbers;
+				$first = strtoupper(trim((string) $this->input->post('first_' . $i)));
+				$last = strtoupper(trim((string) $this->input->post('last_' . $i)));
+				$data['slots'][$i] = array('first' => $first, 'last' => $last);
 
-			$clean = array_values(array_filter($numbers, function ($n) { return $n !== ''; }));
+				if ($first === '') {
+					continue;
+				}
+				if ($last === '') {
+					$clean[] = $first;
+					continue;
+				}
+
+				$result = expand_bond_range($first, $last, 5000);
+				if (isset($result['error'])) {
+					$data['errors'][] = 'Row ' . ($i + 1) . ': ' . $result['error'] . '.';
+				} else {
+					$clean = array_merge($clean, $result['numbers']);
+				}
+			}
+			$clean = array_values(array_unique($clean));
+			if (count($clean) > 5000) {
+				$data['errors'][] = 'Only checked the first 5,000 numbers (including expanded ranges) — that\'s the most we can check in one go.';
+				$clean = array_slice($clean, 0, 5000);
+			}
+
 			if (!empty($clean)) {
 				$data['results'] = $this->db->select('draw_winners.bond_number, draw_winners.prize_value, draws.draw_date, locations.name as location')
 					->from('draw_winners')
@@ -43,18 +67,19 @@ class Search extends CI_Controller {
 	public function power()
 	{
 		$data['title'] = 'Power Search | Irish Prize Bonds';
-		$data['description'] = 'Search a list of Prize Bond numbers against all published draw results.';
+		$data['description'] = 'Search a long list of Prize Bond numbers, or whole number ranges, against all published draw results in one pass.';
 		$data['list'] = '';
 		$data['results'] = null;
 		$data['searched_count'] = 0;
+		$data['errors'] = array();
 
 		if ($this->input->post('do_search')) {
 			$raw = (string) $this->input->post('list');
 			$data['list'] = $raw;
 
-			$parts = preg_split('/[\s,]+/', strtoupper(trim($raw)));
-			$numbers = array_values(array_unique(array_filter($parts, function ($n) { return $n !== ''; })));
-			$numbers = array_slice($numbers, 0, 500);
+			$expanded = expand_bond_list_with_ranges($raw, 5000);
+			$numbers = $expanded['numbers'];
+			$data['errors'] = $expanded['errors'];
 			$data['searched_count'] = count($numbers);
 
 			if (!empty($numbers)) {

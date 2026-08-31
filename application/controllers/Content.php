@@ -86,13 +86,25 @@ class Content extends CI_Controller {
 	public function schedule()
 	{
 		$this->load->database();
-		$today = date('Y-m-d');
 
-		$data['upcoming'] = $this->db->select('draw_date, is_jackpot')->from('draws')
-			->where('draw_date >=', $today)->order_by('draw_date')->limit(12)->get()->result();
+		// The one real, authoritative future date we have: Cron::_sync_next_draw_preview()
+		// keeps a single draws row in sync with statesavings.ie's own "Next Draw" banner
+		// (not a guess — see that method's docblock). Show only this — no calendar
+		// projection beyond it, consistent with never claiming a date we don't
+		// actually know.
+		//
+		// draw_date >= today (not >): on the draw's own calendar day, before results
+		// are posted, it's still genuinely "the next draw" — a strict > would wrongly
+		// claim there's no confirmed next draw for the entire day. published = 0
+		// is what actually retires it once it's done, rather than the date rolling
+		// over at midnight — a completed draw should stop showing here the moment
+		// it's imported, not sit around all day looking like it's still upcoming.
+		$data['next_draw'] = $this->db->select('draw_date, is_jackpot')->from('draws')
+			->where('draw_date >=', date('Y-m-d'))->where('published', 0)
+			->order_by('draw_date', 'asc')->limit(1)->get()->row();
 
 		$data['title'] = 'Prize Bond Draw Dates & Schedule | Irish Prize Bonds';
-		$data['description'] = 'When are Irish Prize Bond draws held? Weekly draw schedule, monthly jackpot dates, and the next upcoming draw dates.';
+		$data['description'] = 'When is the next Irish Prize Bond draw? Weekly draw schedule and monthly jackpot dates explained.';
 		$this->load->view('schedule', $data);
 	}
 

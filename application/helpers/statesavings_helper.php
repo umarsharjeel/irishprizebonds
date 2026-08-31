@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 define('STATESAVINGS_RESULTS_URL', 'https://www.statesavings.ie/api/recent-results/winners-table');
 define('STATESAVINGS_RESULTS_PAGE_URL', 'https://www.statesavings.ie/prize-bonds/results');
+define('STATESAVINGS_HOME_URL', 'https://www.statesavings.ie/prize-bonds');
 define('STATESAVINGS_USER_AGENT', 'IrelandPrizeBondsDashboard/1.0 (data import tool; low-volume automated use)');
 
 function statesavings_http_get($url)
@@ -79,4 +80,45 @@ function statesavings_parse_rows($html)
 		$rows[] = array($bond_number, $location);
 	}
 	return $rows;
+}
+
+/**
+ * Fetches the main Prize Bonds product page, which carries a "Next Draw"
+ * banner — confirmed via a Wayback Machine snapshot from 24 Dec 2024 (7 days
+ * ahead of an irregular Christmas/New Year date shift) to correctly reflect
+ * statesavings.ie's real internal draw schedule, not a naive weekly-Friday
+ * guess. This is the one place they publish a genuinely future draw date.
+ */
+function statesavings_fetch_home_page()
+{
+	return statesavings_http_get(STATESAVINGS_HOME_URL);
+}
+
+/**
+ * Extracts the "Next Draw" date from the homepage HTML (see
+ * statesavings_fetch_home_page()) and returns it as Y-m-d, or null if the
+ * markup isn't found or doesn't parse as a date.
+ */
+function statesavings_parse_next_draw_date($html)
+{
+	if (!preg_match('/m16-draw_details--next-draw date">\s*([^<]+?)\s*</', $html, $m)) {
+		return null;
+	}
+	$timestamp = strtotime(trim($m[1]));
+	if ($timestamp === false) {
+		return null;
+	}
+
+	// Sanity bound, not just a truthy check: the banner text today is always
+	// spelled-out ("Friday 4 September 2026"), which strtotime() parses
+	// unambiguously — but if it were ever rendered as a numeric DD/MM/YYYY
+	// date instead, strtotime() would silently misread it as US MM/DD/YYYY
+	// for any day <= 12. A real "next draw" is always within the next few
+	// weeks, so reject anything further out as a failed parse rather than
+	// trusting a plausible-looking but wrong date.
+	$date = date('Y-m-d', $timestamp);
+	if ($date < date('Y-m-d') || $date > date('Y-m-d', strtotime('+60 days'))) {
+		return null;
+	}
+	return $date;
 }
