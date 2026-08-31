@@ -6,6 +6,7 @@ class Contact_us extends CI_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('session'); // flashdata for the post-redirect-get form result
 	}
 
 	public function index()

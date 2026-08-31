@@ -4,6 +4,7 @@ class Dashboard extends CI_Controller {
 	 function __construct()
     {
       parent::__construct();
+      $this->load->library('session'); // get_user() below reads it — must load before that call
 
 			if(is_null(get_user())){
 				redirect("welcome");

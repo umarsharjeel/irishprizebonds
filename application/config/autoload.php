@@ -58,7 +58,14 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database','session');
+// 'session' deliberately NOT autoloaded: it forces a session cookie on every
+// single page view, including the public results/checker/stats pages that
+// never read or write session data. Only the dashboard (auth) controllers,
+// User_management (login), and Contact_us (flash messages) actually need
+// it — each of those loads it explicitly in its own constructor instead, so
+// public visitors get no cookie at all until they either use the contact
+// form or accept analytics consent.
+$autoload['libraries'] = array('database');
 
 /*
 | -------------------------------------------------------------------

@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_management extends CI_Controller {
 
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->library('session'); // login() writes it, logout() clears it
+    }
 
   	public function index()
   	{

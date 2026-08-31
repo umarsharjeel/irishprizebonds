@@ -15,7 +15,7 @@
 		<p>We keep this to the minimum needed to run the site:</p>
 		<ul>
 			<li><strong>Contact form submissions</strong> — the name, email address and message you provide when you use our <a href="<?php echo base_url(); ?>contact-us/">Contact Us</a> page, along with your IP address and the time of submission (used for spam prevention).</li>
-			<li><strong>Basic technical data</strong> — standard web server logs (IP address, browser type, pages requested) and a session cookie used for core site functionality.</li>
+			<li><strong>Basic technical data</strong> — standard web server logs (IP address, browser type, pages requested). A session cookie is set only on the specific pages that need it (currently just our <a href="<?php echo base_url(); ?>contact-us/">Contact Us</a> form) — most pages on this site set no cookie at all.</li>
 			<li><strong>Analytics</strong> — if enabled, we may use a privacy-respecting analytics service (such as Google Analytics) to understand how the site is used. This only runs if you consent via our cookie banner; see "Cookies" below.</li>
 		</ul>
 		<p>
@@ -26,8 +26,8 @@
 		<h2>Cookies</h2>
 		<p>We use two categories of cookies:</p>
 		<ul>
-			<li><strong>Essential</strong> — a session cookie required for the site to function correctly. This is set automatically and can't be disabled without breaking the site.</li>
-			<li><strong>Analytics (optional)</strong> — used only if you accept them via our cookie banner. These help us understand aggregate site usage and are not set until you consent. You can withdraw consent at any time by clearing your browser's cookies for this site.</li>
+			<li><strong>Essential</strong> — a session cookie, set only on the pages that genuinely need it (e.g. submitting our Contact Us form), required for those features to work and not disableable without breaking them.</li>
+			<li><strong>Analytics (optional)</strong> — used only if you accept them via our cookie banner. These help us understand aggregate site usage and are not set until you consent.</li>
 		</ul>
 
 		<h2>Why we process this data</h2>
@@ -58,6 +58,11 @@
 			with a supervisory authority — in Ireland, the
 			<a href="https://www.dataprotection.ie" target="_blank" rel="noopener">Data Protection Commission</a>.
 			To exercise any of these rights, contact us via our <a href="<?php echo base_url(); ?>contact-us/">Contact Us</a> page.
+		</p>
+		<p>
+			If you've previously accepted or declined analytics cookies, you can change that choice at any time using
+			the "Cookie Settings" link in the footer of every page. Switching to decline also clears any analytics
+			cookies already stored in your browser.
 		</p>
 
 		<h2>Children's privacy</h2>
