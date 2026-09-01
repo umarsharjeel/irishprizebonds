@@ -67,6 +67,23 @@ h3 { font-size: 1.2rem; }
 p { margin: 0 0 14px; }
 a { color: var(--color-primary-dark); text-decoration: none; }
 a:hover { text-decoration: underline; }
+/* In-content links must be distinguishable by more than colour (WCAG 1.4.1) */
+main p a,
+.content-page-body a,
+.faq-item a,
+.site-footer .fine-print a { text-decoration: underline; }
+
+/* Anchor-styled control: renders like a link, stays a real <button> for a11y/SEO */
+.link-button {
+	background: none;
+	border: 0;
+	padding: 0;
+	font: inherit;
+	color: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.site-footer .link-button { color: rgba(255,255,255,0.85); }
 .text-muted { color: var(--color-text-muted); }
 
 /* ---------- Header / nav ---------- */
@@ -244,7 +261,8 @@ a:hover { text-decoration: underline; }
 	padding: 20px;
 	margin-bottom: 20px;
 }
-.card h3 { margin-top: 0; }
+.card h2, .card h3 { margin-top: 0; }
+.card h2 { font-size: 1.2rem; }
 
 .grid-2 {
 	display: grid;
@@ -400,15 +418,25 @@ input:focus, select:focus, textarea:focus {
 @media (min-width: 640px) {
 	.stat-grid { grid-template-columns: repeat(4, 1fr); }
 }
+/* 3-up layout: stays 2 columns on mobile so wide currency values don't overflow */
+.stat-grid-3 { max-width: 600px; }
+@media (min-width: 640px) {
+	.stat-grid-3 { grid-template-columns: repeat(3, 1fr); }
+}
 .stat-tile {
 	background: var(--color-surface);
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius);
 	padding: 16px;
 	text-align: center;
+	min-width: 0;
 }
-.stat-tile .value { font-size: 1.5rem; font-weight: 800; color: var(--color-primary-dark); }
+.stat-tile .value { font-size: 1.5rem; font-weight: 800; color: var(--color-primary-dark); overflow-wrap: anywhere; }
 .stat-tile .label { font-size: 0.82rem; color: var(--color-text-muted); margin-top: 2px; }
+@media (max-width: 480px) {
+	.stat-tile { padding: 12px; }
+	.stat-tile .value { font-size: 1.2rem; }
+}
 
 /* ---------- Leaderboard bars ---------- */
 

@@ -15,7 +15,7 @@
 
 	<div class="grid-2">
 		<div class="card">
-			<h3>Last Draw</h3>
+			<h2>Last Draw</h2>
 			<?php if ($last_draw): ?>
 				<p>
 					<a href="<?php echo base_url(); ?>results/view/<?php echo $last_draw->draw_date; ?>/">
@@ -60,7 +60,7 @@
 		</div>
 
 		<div class="card">
-			<h3>Next Draw</h3>
+			<h2>Next Draw</h2>
 			<?php if ($next_draw): ?>
 				<p>
 					<a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/">

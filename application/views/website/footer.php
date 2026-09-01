@@ -30,7 +30,7 @@
 						<li><a href="<?php echo base_url(); ?>about/">About This Site</a></li>
 						<li><a href="<?php echo base_url(); ?>contact-us/">Contact Us</a></li>
 						<li><a href="<?php echo base_url(); ?>privacy-policy/">Privacy Policy</a></li>
-						<li><a href="javascript:void(0);" id="cookie-settings-link">Cookie Settings</a></li>
+						<li><button type="button" id="cookie-settings-link" class="link-button">Cookie Settings</button></li>
 						<li><a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Official Site (statesavings.ie)</a></li>
 					</ul>
 				</div>

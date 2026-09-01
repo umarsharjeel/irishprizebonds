@@ -22,7 +22,7 @@
 	}
 	?>
 
-	<div class="stat-grid" style="grid-template-columns: repeat(3,1fr); max-width:600px;">
+	<div class="stat-grid stat-grid-3">
 		<div class="stat-tile">
 			<div class="value"><?php echo count($months); ?></div>
 			<div class="label">Months Tracked</div>

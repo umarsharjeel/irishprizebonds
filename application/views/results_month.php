@@ -12,7 +12,7 @@
 
 	<p class="text-muted">Every Irish Prize Bond draw held in <?php echo $month_label; ?>, with prize funds and winner counts. Click any draw for the full winners list.</p>
 
-	<div class="stat-grid" style="grid-template-columns: repeat(3,1fr); max-width:600px;">
+	<div class="stat-grid stat-grid-3">
 		<div class="stat-tile">
 			<div class="value"><?php echo count($draws); ?></div>
 			<div class="label">Draws Held</div>
