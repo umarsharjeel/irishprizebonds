@@ -8,8 +8,8 @@
 		<div class="card">
 			<form method="get">
 				<div class="form-row">
-					<label>Number of bonds you hold (or plan to hold)</label>
-					<input type="number" name="bonds" min="4" max="40000" step="1" value="<?php echo $bonds ?: ''; ?>" placeholder="e.g. 100">
+					<label for="bonds-held">Number of bonds you hold (or plan to hold)</label>
+					<input type="number" name="bonds" id="bonds-held" min="4" max="40000" step="1" value="<?php echo $bonds ?: ''; ?>" placeholder="e.g. 100">
 				</div>
 				<p class="text-muted" style="margin-bottom:10px;">Minimum holding is 4 bonds (&euro;25). Maximum is 40,000 bonds (&euro;250,000).</p>
 				<button type="submit" class="btn btn-primary">Calculate</button>
@@ -18,7 +18,7 @@
 
 		<?php if ($result): ?>
 			<div class="card">
-				<h3>With <?php echo number_format($result['bonds']); ?> bonds (&euro;<?php echo number_format($result['euro_value']); ?>)</h3>
+				<h2>With <?php echo number_format($result['bonds']); ?> bonds (&euro;<?php echo number_format($result['euro_value']); ?>)</h2>
 				<div class="stat-grid" style="grid-template-columns: repeat(1,1fr);">
 					<div class="stat-tile" style="text-align:left; display:flex; justify-content:space-between; align-items:center;">
 						<span class="label">Odds of the top prize in one draw</span>

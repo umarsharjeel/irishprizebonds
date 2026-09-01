@@ -27,7 +27,7 @@ echo json_encode(array(
 
 		<?php foreach ($faqs as $item): ?>
 			<div class="faq-item">
-				<h3><?php echo htmlspecialchars($item['q']); ?></h3>
+				<h2><?php echo htmlspecialchars($item['q']); ?></h2>
 				<p><?php echo $item['a']; ?></p>
 			</div>
 		<?php endforeach; ?>

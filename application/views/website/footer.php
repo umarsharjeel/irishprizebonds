@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="footer-grid">
 				<div>
-					<h4>Results</h4>
+					<h2>Results</h2>
 					<ul>
 						<li><a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a></li>
 						<li><a href="<?php echo base_url(); ?>schedule/">Draw Dates</a></li>
@@ -12,7 +12,7 @@
 					</ul>
 				</div>
 				<div>
-					<h4>Insights</h4>
+					<h2>Insights</h2>
 					<ul>
 						<li><a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a></li>
 						<li><a href="<?php echo base_url(); ?>stats/counties/">County Stats</a></li>
@@ -20,7 +20,7 @@
 					</ul>
 				</div>
 				<div>
-					<h4>Learn</h4>
+					<h2>Learn</h2>
 					<ul>
 						<li><a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a></li>
 						<li><a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy &amp; Cash In</a></li>

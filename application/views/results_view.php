@@ -52,12 +52,12 @@
 
 	<form method="get" class="form-inline-fields">
 		<div class="form-row">
-			<label>Search bond number</label>
-			<input type="text" name="q" placeholder="e.g. AHU176759" value="<?php echo htmlspecialchars($search); ?>">
+			<label for="filter-q">Search bond number</label>
+			<input type="text" name="q" id="filter-q" placeholder="e.g. AHU176759" value="<?php echo htmlspecialchars($search); ?>">
 		</div>
 		<div class="form-row">
-			<label>Location</label>
-			<select name="location">
+			<label for="filter-location">Location</label>
+			<select name="location" id="filter-location">
 				<option value="0">All Locations</option>
 				<?php foreach ($locations as $l): ?>
 					<option value="<?php echo $l->id; ?>" <?php echo ($location_id == $l->id) ? 'selected' : ''; ?>><?php echo $l->name; ?></option>
@@ -65,8 +65,8 @@
 			</select>
 		</div>
 		<div class="form-row">
-			<label>Sort</label>
-			<select name="sort">
+			<label for="filter-sort">Sort</label>
+			<select name="sort" id="filter-sort">
 				<option value="prize_desc" <?php echo $sort == 'prize_desc' ? 'selected' : ''; ?>>Prize Value High - Low</option>
 				<option value="prize_asc" <?php echo $sort == 'prize_asc' ? 'selected' : ''; ?>>Prize Value Low - High</option>
 				<option value="bond" <?php echo $sort == 'bond' ? 'selected' : ''; ?>>Bond Number</option>

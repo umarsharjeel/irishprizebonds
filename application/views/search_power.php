@@ -17,7 +17,7 @@
 	<div class="card">
 		<form method="post">
 			<div class="form-row">
-				<textarea name="list" rows="8" placeholder="AHU176759&#10;BDY424458-BDY424478&#10;AYR077005"><?php echo htmlspecialchars($list); ?></textarea>
+				<textarea name="list" rows="8" aria-label="Bond numbers to check, one per line or separated by commas or spaces" placeholder="AHU176759&#10;BDY424458-BDY424478&#10;AYR077005"><?php echo htmlspecialchars($list); ?></textarea>
 			</div>
 			<button type="submit" name="do_search" value="1" class="btn btn-primary">Search</button>
 		</form>

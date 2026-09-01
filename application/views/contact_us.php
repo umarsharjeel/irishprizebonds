@@ -24,16 +24,16 @@
 		<div class="card" style="max-width:520px;">
 			<form method="post" action="<?php echo base_url(); ?>contact-us/submit/">
 				<div class="form-row">
-					<label>Name</label>
-					<input type="text" name="name" value="<?php echo htmlspecialchars($old['name']); ?>" required>
+					<label for="contact-name">Name</label>
+					<input type="text" name="name" id="contact-name" value="<?php echo htmlspecialchars($old['name']); ?>" required>
 				</div>
 				<div class="form-row">
-					<label>Email</label>
-					<input type="text" name="email" value="<?php echo htmlspecialchars($old['email']); ?>" required>
+					<label for="contact-email">Email</label>
+					<input type="text" name="email" id="contact-email" value="<?php echo htmlspecialchars($old['email']); ?>" required>
 				</div>
 				<div class="form-row">
-					<label>Message</label>
-					<textarea name="message" rows="6" required><?php echo htmlspecialchars($old['message']); ?></textarea>
+					<label for="contact-message">Message</label>
+					<textarea name="message" id="contact-message" rows="6" required><?php echo htmlspecialchars($old['message']); ?></textarea>
 				</div>
 				<!-- Leave this field blank -->
 				<div style="position:absolute; left:-9999px;" aria-hidden="true">

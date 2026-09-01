@@ -71,6 +71,7 @@ a:hover { text-decoration: underline; }
 main p a,
 .content-page-body a,
 .faq-item a,
+.cookie-consent-banner p a,
 .site-footer .fine-print a { text-decoration: underline; }
 
 /* Anchor-styled control: renders like a link, stays a real <button> for a11y/SEO */
@@ -472,7 +473,7 @@ input:focus, select:focus, textarea:focus {
 @media (min-width: 640px) {
 	.site-footer .footer-grid { grid-template-columns: repeat(3, 1fr); }
 }
-.site-footer h4 { color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+.site-footer h2 { color: #fff; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 10px; }
 .site-footer ul { list-style: none; padding: 0; margin: 0; }
 .site-footer li { margin-bottom: 6px; }
 .site-footer .fine-print { border-top: 1px solid rgba(255,255,255,0.12); padding-top: 16px; font-size: 0.82rem; color: rgba(255,255,255,0.55); }
@@ -482,7 +483,7 @@ input:focus, select:focus, textarea:focus {
 .faq-item { border-bottom: 1px solid var(--color-border); padding: 16px 0; }
 .faq-item:first-child { padding-top: 0; }
 .faq-item:last-child { border-bottom: none; }
-.faq-item h3 { margin-bottom: 6px; }
+.faq-item h2 { font-size: 1.2rem; margin-bottom: 6px; }
 
 .content-page-body { max-width: 760px; }
 .content-page-body h2 { margin-top: 28px; }

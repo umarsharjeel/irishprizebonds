@@ -69,7 +69,7 @@
 					<?php if ($next_draw->is_jackpot): ?><span class="badge badge-jackpot">Jackpot</span><?php endif; ?>
 				</p>
 				<p class="text-muted"><?php echo $next_draw->is_jackpot ? 'This is the monthly jackpot draw, with a top prize of €500,000 on top of the usual weekly prizes.' : 'Regular weekly draw — top prize €50,000.'; ?></p>
-				<a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/" class="btn btn-default">More Info</a>
+				<a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/" class="btn btn-default">Next Draw Details</a>
 			<?php else: ?>
 				<p class="text-muted">No upcoming draw scheduled yet.</p>
 			<?php endif; ?>
