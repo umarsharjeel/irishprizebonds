@@ -71,20 +71,8 @@ a:hover { text-decoration: underline; }
 main p a,
 .content-page-body a,
 .faq-item a,
-.cookie-consent-banner p a,
 .site-footer .fine-print a { text-decoration: underline; }
 
-/* Anchor-styled control: renders like a link, stays a real <button> for a11y/SEO */
-.link-button {
-	background: none;
-	border: 0;
-	padding: 0;
-	font: inherit;
-	color: inherit;
-	text-decoration: underline;
-	cursor: pointer;
-}
-.site-footer .link-button { color: rgba(255,255,255,0.85); }
 .text-muted { color: var(--color-text-muted); }
 
 /* ---------- Header / nav ---------- */
@@ -489,33 +477,6 @@ input:focus, select:focus, textarea:focus {
 .content-page-body h2 { margin-top: 28px; }
 .content-page-body ul, .content-page-body ol { padding-left: 22px; }
 .content-page-body li { margin-bottom: 6px; }
-
-/* ---------- Cookie consent banner ---------- */
-
-.cookie-consent-banner {
-	display: none;
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 100;
-	background: var(--color-surface);
-	border-top: 1px solid var(--color-border);
-	box-shadow: 0 -4px 14px rgba(16, 40, 32, 0.12);
-	padding: 14px 0;
-}
-.cookie-consent-inner {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	align-items: flex-start;
-}
-.cookie-consent-inner p { margin: 0; font-size: 0.9rem; color: var(--color-text-muted); }
-.cookie-consent-actions { display: flex; gap: 10px; flex-shrink: 0; }
-@media (min-width: 720px) {
-	.cookie-consent-inner { flex-direction: row; align-items: center; justify-content: space-between; }
-	.cookie-consent-inner p { flex: 1; margin-right: 20px; }
-}
 
 .lead-paragraph {
 	font-size: 1.05rem;

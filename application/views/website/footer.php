@@ -30,7 +30,6 @@
 						<li><a href="<?php echo base_url(); ?>about/">About This Site</a></li>
 						<li><a href="<?php echo base_url(); ?>contact-us/">Contact Us</a></li>
 						<li><a href="<?php echo base_url(); ?>privacy-policy/">Privacy Policy</a></li>
-						<li><button type="button" id="cookie-settings-link" class="link-button">Cookie Settings</button></li>
 						<li><a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Official Site (statesavings.ie)</a></li>
 					</ul>
 				</div>
@@ -40,19 +39,5 @@
 			</div>
 		</div>
 	</footer>
-
-	<div id="cookie-consent-banner" class="cookie-consent-banner" style="display:none;">
-		<div class="container cookie-consent-inner">
-			<p>
-				We use essential cookies to run this site, and optional analytics cookies to help us understand usage —
-				only if you agree. See our <a href="<?php echo base_url(); ?>privacy-policy/">Privacy Policy</a>.
-			</p>
-			<div class="cookie-consent-actions">
-				<button id="cookie-consent-reject" type="button" class="btn btn-default btn-sm">Reject Non-Essential</button>
-				<button id="cookie-consent-accept" type="button" class="btn btn-primary btn-sm">Accept All</button>
-			</div>
-		</div>
-	</div>
-	<script src="<?php echo base_url(); ?>assets/js/cookie-consent.js?v=<?php echo filemtime(APPPATH . '../assets/js/cookie-consent.js'); ?>"></script>
 </body>
 </html>

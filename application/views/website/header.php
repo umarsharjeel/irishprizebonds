@@ -42,10 +42,7 @@
 	), JSON_UNESCAPED_SLASHES); ?>
 	</script>
 
-	<!-- Google Analytics (GA4) — inert until cookie consent is accepted; see
-	     assets/js/cookie-consent.js and assets/js/analytics.js -->
-	<script type="text/plain" data-cookieconsent="analytics" async src="https://www.googletagmanager.com/gtag/js?id=G-0L79QEV5GT"></script>
-	<script type="text/plain" data-cookieconsent="analytics" src="<?php echo base_url(); ?>assets/js/analytics.js?v=<?php echo filemtime(APPPATH . '../assets/js/analytics.js'); ?>"></script>
+	<?php $this->load->view('website/head_scripts'); ?>
 </head>
 <body>
 	<header class="site-header">
