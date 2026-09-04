@@ -29,6 +29,26 @@ class Overview extends CI_Controller {
      // $boxes[] = stats_box("Total Money", "app_downloads","SUM(price)");
      // $boxes[] = stats_box("Facebook Money", "app_downloads","SUM(price)","3",array('app_name' => 'facebook'));
 
+     // Cron::_mark_live_check_done() (see application/controllers/Cron.php) records
+     // this every time the cron actually checks statesavings.ie for a new draw —
+     // surfacing it here makes it obvious from the dashboard if the cron has
+     // stopped running (or stopped reaching this page) rather than only finding
+     // out when results fail to show up on the site.
+     $last_check_text = 'Never';
+     if ($this->db->table_exists('cron_state')) {
+       // Elapsed time computed inside MySQL (TIMESTAMPDIFF against its own NOW()),
+       // not by comparing the stored value against PHP's time() — the two run in
+       // different timezones in this environment, so that comparison would be
+       // silently wrong by however many hours they disagree by.
+       $row = $this->db->query(
+         "SELECT TIMESTAMPDIFF(SECOND, value, NOW()) as secs_ago FROM cron_state WHERE name = 'last_live_check'"
+       )->row();
+       if ($row) {
+         $last_check_text = get_time_ago(time() - (int) $row->secs_ago);
+       }
+     }
+     $boxes[] = array('width' => '3', 'box_title' => 'Last Cron Check', 'box_count' => $last_check_text);
+
      $data["boxes"] = $boxes;
 
      $charts = array();

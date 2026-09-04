@@ -24,6 +24,16 @@ class Antelope extends CI_Model {
     $xcrud->label('total_prizes_count','Total Prizes');
     $xcrud->label('auto_import','Auto-Import?');
 
+    // xCRUD's checkbox markup nests <input> inside <label> instead of as its
+    // sibling, which this site's custom checkbox CSS (built for the sibling
+    // pattern, see assets/css/style.css) can't handle — the real input ends
+    // up unreachable to clicks. A Yes/No dropdown sidesteps that whole
+    // rendering path since it's a plain <select>.
+    $yes_no = array(1 => 'Yes', 0 => 'No');
+    $xcrud->change_type('is_jackpot', 'select', '', $yes_no);
+    $xcrud->change_type('published', 'select', '', $yes_no);
+    $xcrud->change_type('auto_import', 'select', '', $yes_no);
+
     $tiers = $xcrud->nested_table('Prize Tiers','id','draw_prize_tiers','draw_id');
     $tiers->fields('prize_value,prize_count,sort_order');
     $tiers->columns('prize_value,prize_count,sort_order');
