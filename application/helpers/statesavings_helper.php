@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 define('STATESAVINGS_RESULTS_URL', 'https://www.statesavings.ie/api/recent-results/winners-table');
 define('STATESAVINGS_RESULTS_PAGE_URL', 'https://www.statesavings.ie/prize-bonds/results');
 define('STATESAVINGS_HOME_URL', 'https://www.statesavings.ie/prize-bonds');
-define('STATESAVINGS_USER_AGENT', 'IrelandPrizeBondsDashboard/1.0 (data import tool; low-volume automated use)');
+define('STATESAVINGS_USER_AGENT', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36');
 
 function statesavings_http_get($url)
 {

@@ -25,6 +25,17 @@ class Cron extends CI_Controller {
 	// that import moving.
 	const LIVE_CHECK_INTERVAL_SECONDS = 1800; // 30 minutes
 
+	// Ceiling on how many calendar dates _confirm_available_draws() will probe
+	// in a single live check when looking for the next real draw. Draws are
+	// normally exactly 7 days apart, but a holiday (e.g. Good Friday) can shift
+	// that by a few days — see git history around 2026-08-31 — so we scan a
+	// small window day-by-day rather than only ever checking +7 days. Bounded
+	// so a long gap (e.g. the 2026-09 Radware outage — see that function's
+	// docblock) can't consume a whole run's budget in one call; the cached
+	// "confirmed no draw through" date in cron_state means the remaining days
+	// pick up on the next live check instead of being re-scanned.
+	const MAX_DRAW_SCAN_DAYS = 10;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -77,8 +88,7 @@ class Cron extends CI_Controller {
 			// $budget like every other request-issuing step below, so a very low
 			// configured budget (e.g. 1) can't still cost more requests than it allows.
 			if ($budget > 0) {
-				$confirmed = $this->_confirm_available_draws();
-				$budget -= 1; // that confirmation check costs one request
+				$confirmed = $this->_confirm_available_draws($budget);
 				if ($confirmed > 0) {
 					echo "Confirmed {$confirmed} draw(s) now listed on statesavings.ie — enabled for import.\n";
 				}
@@ -262,69 +272,95 @@ class Cron extends CI_Controller {
 	}
 
 	/**
-	 * The sole source of new draw rows for the real site. Checks statesavings.ie's
-	 * own "Show winners from" date list — every date on it is a draw that has
-	 * genuinely happened, with results already posted — and makes sure we have a
-	 * row for each one, already confirmed (auto_import=1), so _get_active_draw()
-	 * can pick it up.
+	 * The sole source of new draw rows for the real site. Used to read
+	 * statesavings.ie's "Show winners from" date list off their results page —
+	 * but as of the outage investigated 2026-09-04, that page (and their
+	 * homepage) sit behind a Radware bot challenge that no plain HTTP request
+	 * can pass, regardless of User-Agent, so that listing is no longer
+	 * reachable here. Their winners-table API (STATESAVINGS_RESULTS_URL, used
+	 * by statesavings_fetch_page() below) is NOT behind that challenge, so we
+	 * use it instead: probe calendar dates one by one, starting the day after
+	 * the newest date we already have a row for, and treat the first date
+	 * whose response reports any winners as the new draw.
 	 *
-	 * Deliberately reactive rather than predictive: we used to pre-guess a weekly
-	 * Friday cadence and only confirm against it here, but a real draw doesn't
-	 * always land on a Friday (Good Friday every year, plus other one-off shifts
-	 * around Christmas/New Year that don't even follow a consistent rule) — see
-	 * git history around 2026-08-31. Only ever trusting statesavings.ie's own
-	 * listing sidesteps that whole class of bug: we never claim a date is a draw
-	 * until they say so, so there's nothing to guess wrong.
+	 * Still deliberately reactive rather than predictive, same as the old
+	 * approach: nothing is ever confirmed until the API itself reports real
+	 * results for that exact date, so a holiday shift (Good Friday, one-off
+	 * shifts around Christmas/New Year — see git history around 2026-08-31)
+	 * still can't produce a wrongly-guessed date, it just takes an extra day
+	 * or two of probing to reach. MAX_DRAW_SCAN_DAYS bounds that probing, and
+	 * _no_draw_confirmed_through()/_mark_no_draw_confirmed_through() cache how
+	 * far we've already scanned so a run of empty days isn't re-probed on
+	 * every live check.
 	 *
-	 * Returns how many draws were newly confirmed (existing rows flipped to
-	 * auto_import=1, or brand new rows inserted).
+	 * Decrements $budget (by reference) by one per date probed — callers must
+	 * gate on $budget > 0 before calling, same as every other request-issuing
+	 * step. Returns how many draws were newly confirmed (0 or 1 in practice:
+	 * the scan stops at the first hit).
 	 */
-	private function _confirm_available_draws()
+	private function _confirm_available_draws(&$budget)
 	{
-		$html = statesavings_fetch_results_page();
-		if ($html === null) {
-			return 0;
+		// Only counts confirmed (auto_import=1) rows as "already known" — an
+		// unconfirmed future preview row from _sync_next_draw_preview() (or a
+		// legacy manual entry) must NOT push the scan past its own date, or
+		// that date would never get probed/confirmed at all.
+		$latest = $this->db->select_max('draw_date', 'max_date')->from('draws')->where('auto_import', 1)->get()->row();
+		$scan_from = ($latest && $latest->max_date) ? $latest->max_date : self::BACKFILL_START_DATE;
+		$scan_from = max($scan_from, $this->_no_draw_confirmed_through());
+
+		$cursor = new DateTime($scan_from);
+		$cursor->modify('+1 day');
+		$today = date('Y-m-d');
+
+		$confirmed = 0;
+		$days_checked = 0;
+
+		while ($budget > 0 && $days_checked < self::MAX_DRAW_SCAN_DAYS && $cursor->format('Y-m-d') <= $today) {
+			$date = $cursor->format('Y-m-d');
+
+			$html = statesavings_fetch_page($date, 'all', 1);
+			$budget--;
+			$days_checked++;
+
+			if ($html === null) {
+				break; // request failed — retry from this date on the next run
+			}
+
+			if (statesavings_parse_total_count($html) > 0) {
+				$this->_confirm_draw_date($date);
+				$confirmed++;
+				break; // one confirmed draw is all a single check needs to find
+			}
+
+			$this->_mark_no_draw_confirmed_through($date);
+			$cursor->modify('+1 day');
 		}
 
-		if (!preg_match('/<select id="draw-date-select"[^>]*>(.*?)<\/select>/s', $html, $select_match)) {
-			return 0;
-		}
-		preg_match_all('/value="(\d{4}-\d{2}-\d{2})"/', $select_match[1], $m);
-		$available_dates = $m[1];
-		if (empty($available_dates)) {
-			return 0;
-		}
+		return $confirmed;
+	}
 
-		// Legacy case: a handful of pre-existing rows from before this design change
-		// (or a manual dashboard entry) may already exist unconfirmed — confirm them
-		// rather than inserting a duplicate.
-		$this->db->where_in('draw_date', $available_dates)
-			->where('auto_import', 0)
-			->where('published', 0)
-			->set('auto_import', 1)
-			->update('draws');
-		$confirmed = $this->db->affected_rows();
-
-		// The normal case now: no row exists yet for this confirmed date at all —
-		// insert it directly, already confirmed. is_jackpot here is a provisional
-		// calendar guess; it gets corrected from the real prize tiers during tier
-		// discovery below, since a holiday-shifted date isn't reliably "the last
-		// Friday of the month" even in a jackpot week.
-		$existing = $this->db->select('draw_date')->from('draws')->where_in('draw_date', $available_dates)->get()->result();
-		$existing_dates = array_map(function ($r) { return $r->draw_date; }, $existing);
-		$missing_dates = array_diff($available_dates, $existing_dates);
-
-		foreach ($missing_dates as $date) {
+	/**
+	 * Marks $date as a confirmed real draw: flips an existing row (e.g. a
+	 * stale _sync_next_draw_preview() row from before it too went dark behind
+	 * the Radware challenge) to auto_import=1, or inserts a new confirmed row
+	 * if none exists yet. is_jackpot here is a provisional calendar guess; it
+	 * gets corrected from the real prize tiers during tier discovery in
+	 * import_results(), since a holiday-shifted date isn't reliably "the last
+	 * Friday of the month" even in a jackpot week.
+	 */
+	private function _confirm_draw_date($date)
+	{
+		$existing = $this->db->select('id')->from('draws')->where('draw_date', $date)->get()->row();
+		if ($existing) {
+			$this->db->where('id', $existing->id)->update('draws', array('auto_import' => 1));
+		} else {
 			$is_jackpot = is_last_friday_of_month($date) ? 1 : 0;
 			$this->db->query(
 				"INSERT IGNORE INTO draws (draw_date, is_jackpot, published, auto_import, total_prize_fund, total_prizes_count) VALUES (?, ?, 0, 1, 0, 0)",
 				array($date, $is_jackpot)
 			);
-			echo "Discovered {$date} on statesavings.ie — added it.\n";
 		}
-		$confirmed += count($missing_dates);
-
-		return $confirmed;
+		echo "Confirmed {$date} on statesavings.ie — enabled for import.\n";
 	}
 
 	/**
@@ -556,6 +592,33 @@ class Cron extends CI_Controller {
 		}
 		$this->db->query(
 			"INSERT INTO cron_state (name, value) VALUES ('last_live_check', NOW()) ON DUPLICATE KEY UPDATE value = NOW()"
+		);
+	}
+
+	/**
+	 * How far _confirm_available_draws() has already scanned with no draw
+	 * found, so a run of empty days (the usual Sat-Thu between Fridays) isn't
+	 * re-probed via the API on every 30-minute live check. Falls back to
+	 * BACKFILL_START_DATE if the cron_state table doesn't exist yet or has no
+	 * row — same defensive default as _live_check_due() above.
+	 */
+	private function _no_draw_confirmed_through()
+	{
+		if (!$this->db->table_exists('cron_state')) {
+			return self::BACKFILL_START_DATE;
+		}
+		$row = $this->db->select('value')->from('cron_state')->where('name', 'no_draw_confirmed_through')->get()->row();
+		return $row ? $row->value : self::BACKFILL_START_DATE;
+	}
+
+	private function _mark_no_draw_confirmed_through($date)
+	{
+		if (!$this->db->table_exists('cron_state')) {
+			return;
+		}
+		$this->db->query(
+			"INSERT INTO cron_state (name, value) VALUES ('no_draw_confirmed_through', ?) ON DUPLICATE KEY UPDATE value = ?",
+			array($date, $date)
 		);
 	}
 
