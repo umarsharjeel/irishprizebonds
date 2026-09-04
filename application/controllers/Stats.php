@@ -40,7 +40,7 @@ class Stats extends CI_Controller {
 		$data['total_pages'] = $total_pages;
 
 		$data['title'] = 'Prize Bond Winners List - Every Big Winner | Irish Prize Bonds';
-		$data['description'] = 'A running list of Irish Prize Bond winners: every €50,000 top prize and €500,000 monthly jackpot winner across all the draws we track, with dates and locations.';
+		$data['description'] = 'A running list of Irish Prize Bond winners: every regular-draw top prize and €500,000 monthly jackpot winner across all the draws we track, with dates and locations.';
 		$this->load->view('stats_winners', $data);
 	}
 
@@ -74,7 +74,10 @@ class Stats extends CI_Controller {
 		// ~141,000,000 : 1 odds of a €25 (4-bond) holding winning the top prize in a
 		// single draw implies an assumed pool of ~4 * 141,000,000 bonds in circulation.
 		$assumed_total_bonds = 564000000;
-		$avg_prizes_per_regular_draw = 8633; // from a real observed regular (non-jackpot) draw
+		// Prize fund/tiers increased with effect from 1 Sept 2026 (top prize €50k -> €100k,
+		// 20x€1,000+20x€500 -> 50x€1,000, base prize €75 -> €100); NTMA guidance puts the
+		// new weekly total around 10,000 prizes, up from the ~8,633 observed pre-change.
+		$avg_prizes_per_regular_draw = 10000;
 
 		$bonds = (int) $this->input->get('bonds');
 		$result = null;

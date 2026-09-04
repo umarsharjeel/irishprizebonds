@@ -3,7 +3,7 @@
 <div class="container">
 	<h1>&#127942; Prize Bond Winners List</h1>
 	<p class="lead-paragraph">
-		A running list of Irish Prize Bond winners &mdash; every &euro;50,000 top prize and &euro;500,000 monthly
+		A running list of Irish Prize Bond winners &mdash; every regular-draw top prize and &euro;500,000 monthly
 		jackpot winner across all the draws we track, with the draw date and winning location. The official site
 		never aggregates winners across draws like this &mdash; this page is where the numbers add up: how many
 		life-changing prizes have actually been won, and what they've totalled. For a specific draw's full winners

@@ -69,7 +69,7 @@
 					</a>
 					<?php if ($next_draw->is_jackpot): ?><span class="badge badge-jackpot">Jackpot</span><?php endif; ?>
 				</p>
-				<p class="text-muted"><?php echo $next_draw->is_jackpot ? 'This is the monthly jackpot draw, with a top prize of €500,000 on top of the usual weekly prizes.' : 'Regular weekly draw — top prize €50,000.'; ?></p>
+				<p class="text-muted"><?php echo $next_draw->is_jackpot ? 'This is the monthly jackpot draw, with a top prize of €500,000 on top of the usual weekly prizes.' : 'Regular weekly draw — top prize €100,000.'; ?></p>
 				<a href="<?php echo base_url(); ?>results/view/<?php echo $next_draw->draw_date; ?>/" class="btn btn-default">Next Draw Details</a>
 			<?php else: ?>
 				<p class="text-muted">No upcoming draw scheduled yet.</p>
@@ -98,7 +98,7 @@
 	<div class="stat-grid">
 		<a href="<?php echo base_url(); ?>stats/winners/" class="card" style="text-decoration:none;">
 			<h3>&#127942; Big Winners</h3>
-			<p class="text-muted" style="margin-bottom:0;">Every jackpot and €50,000+ winner, all in one place.</p>
+			<p class="text-muted" style="margin-bottom:0;">Every jackpot and top-prize winner, all in one place.</p>
 		</a>
 		<a href="<?php echo base_url(); ?>stats/counties/" class="card" style="text-decoration:none;">
 			<h3>&#128506; County Stats</h3>

@@ -17,22 +17,22 @@
 		</p>
 
 		<h2>The weekly draw</h2>
-		<p>A draw is held every week — see the full <a href="<?php echo base_url(); ?>schedule/">draw schedule</a> for upcoming dates. In a typical week, the prize tiers are:</p>
+		<p>A draw is held every week — see the full <a href="<?php echo base_url(); ?>schedule/">draw schedule</a> for upcoming dates. Since the prize fund was increased with effect from 1 September 2026, the prize tiers in a typical week are:</p>
 		<div class="table-wrap" style="max-width:480px;">
 			<table class="data-table">
 				<thead><tr><th>Prize</th><th>Number of Winners</th></tr></thead>
 				<tbody>
-					<tr><td>&euro;50,000</td><td>1</td></tr>
-					<tr><td>&euro;1,000</td><td>20</td></tr>
-					<tr><td>&euro;500</td><td>20</td></tr>
-					<tr><td>&euro;75</td><td>Several thousand (varies monthly)</td></tr>
+					<tr><td>&euro;100,000</td><td>1</td></tr>
+					<tr><td>&euro;1,000</td><td>50</td></tr>
+					<tr><td>&euro;100</td><td>Several thousand (varies monthly)</td></tr>
 				</tbody>
 			</table>
 		</div>
 		<p>
-			The number of &euro;75 prizes isn't fixed &mdash; the overall prize fund is recalculated at the end of every month based on
-			the total value of Prize Bonds in circulation and net sales that month, and the bulk of that fund is paid out as the large
-			number of &euro;75 prizes.
+			The number of &euro;100 prizes isn't fixed &mdash; the overall prize fund is recalculated at the end of every month based
+			on the total value of Prize Bonds in circulation and net sales that month, and the bulk of that fund is paid out as the large
+			number of &euro;100 prizes. Based on the current level of Prize Bonds outstanding, around 10,000 prizes are expected to be
+			awarded every week.
 		</p>
 
 		<h2>The monthly jackpot</h2>
