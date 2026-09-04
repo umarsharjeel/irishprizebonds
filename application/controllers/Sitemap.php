@@ -14,7 +14,8 @@ class Sitemap extends CI_Controller {
 
 		$static_pages = array(
 			'' => '1.0',
-			'results/archive' => '0.9',
+			'results' => '0.9',
+			'results/archive' => '0.8',
 			'schedule' => '0.7',
 			'search/checker' => '0.8',
 			'search/power' => '0.7',

@@ -10,8 +10,8 @@ class Search extends CI_Controller {
 
 	public function checker()
 	{
-		$data['title'] = 'Check Your Prize Bond Numbers | Irish Prize Bonds';
-		$data['description'] = 'Check up to five Prize Bond numbers — or whole ranges from a single certificate — against all published draw results.';
+		$data['title'] = 'Check Prize Bond Numbers Online - Free Checker | Irish Prize Bonds';
+		$data['description'] = 'Check your Irish Prize Bond numbers online for free. Enter up to five numbers — or whole ranges from a certificate — against every published draw result, not just the latest.';
 		$data['slots'] = array();
 		for ($i = 0; $i < 5; $i++) {
 			$data['slots'][$i] = array('first' => '', 'last' => '');

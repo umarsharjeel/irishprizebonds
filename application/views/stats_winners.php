@@ -1,11 +1,13 @@
 <?php $this->load->view('website/header', array('title' => $title, 'description' => $description)); ?>
 
 <div class="container">
-	<h1>&#127942; Big Winners</h1>
+	<h1>&#127942; Prize Bond Winners List</h1>
 	<p class="lead-paragraph">
-		Every &euro;50,000 top prize and &euro;500,000 monthly jackpot winner across all the draws we track, gathered
-		into one running list. The official site never aggregates across draws like this — this page is where the
-		numbers add up: how many life-changing prizes have actually been won, and what they've totalled.
+		A running list of Irish Prize Bond winners &mdash; every &euro;50,000 top prize and &euro;500,000 monthly
+		jackpot winner across all the draws we track, with the draw date and winning location. The official site
+		never aggregates winners across draws like this &mdash; this page is where the numbers add up: how many
+		life-changing prizes have actually been won, and what they've totalled. For a specific draw's full winners
+		list, open that date in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
 	</p>
 
 	<div class="stat-grid" style="grid-template-columns: repeat(2,1fr); max-width:420px;">

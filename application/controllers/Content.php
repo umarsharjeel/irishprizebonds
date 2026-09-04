@@ -43,8 +43,20 @@ class Content extends CI_Controller {
 				'a' => 'Use our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool for up to 5 numbers at a time, or <a href="' . base_url() . 'search/power">Power Search</a> to paste a longer list. You can also browse every draw individually in the <a href="' . base_url() . 'results/archive">Draw Archive</a>.',
 			),
 			array(
+				'q' => 'Can I check old Prize Bonds online?',
+				'a' => 'Yes. Old Prize Bonds stay valid indefinitely and remain in every draw until they are cashed in, and unclaimed prizes never expire. Enter any bond number &mdash; however old &mdash; into our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool and it is matched against every published draw we hold. If you have lost the certificate for an old holding, the official <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a> site can trace it from your name and address.',
+			),
+			array(
+				'q' => 'How soon after a draw are the results published here?',
+				'a' => 'Prize Bond draws take place each week and the official results are released shortly afterwards. We import each new draw as soon as the official figures are available, usually within a day, so the <a href="' . base_url() . 'results">latest results</a> page and number checker stay current. There is no minute-by-minute live feed &mdash; draw results are a single published set, not a rolling broadcast.',
+			),
+			array(
 				'q' => 'How far back do your results go?',
 				'a' => "We're continuously building a historical archive of draw results. Check the <a href=\"" . base_url() . 'results/archive">Draw Archive</a> for the current range of draws covered.',
+			),
+			array(
+				'q' => 'Are Irish Prize Bonds the same as UK Premium Bonds?',
+				'a' => 'They are the same idea run by different countries. Irish Prize Bonds are issued by the State through the NTMA and Prize Bond Company; UK Premium Bonds are issued by NS&amp;I. This site only covers the Irish scheme &mdash; draw dates, prize tiers, tax treatment and the checker here all relate to Irish Prize Bonds, not UK Premium Bonds.',
 			),
 			array(
 				'q' => 'How long have Prize Bonds existed?',
@@ -103,8 +115,8 @@ class Content extends CI_Controller {
 			->where('draw_date >=', date('Y-m-d'))->where('published', 0)
 			->order_by('draw_date', 'asc')->limit(1)->get()->row();
 
-		$data['title'] = 'Prize Bond Draw Dates & Schedule | Irish Prize Bonds';
-		$data['description'] = 'When is the next Irish Prize Bond draw? Weekly draw schedule and monthly jackpot dates explained.';
+		$data['title'] = 'When Is the Next Prize Bond Draw? Dates and Schedule | Irish Prize Bonds';
+		$data['description'] = 'When is the next Irish Prize Bond draw? The confirmed next draw date, the weekly draw schedule and monthly €500,000 jackpot dates explained.';
 		$this->load->view('schedule', $data);
 	}
 

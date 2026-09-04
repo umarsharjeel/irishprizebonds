@@ -3,10 +3,11 @@
 <div class="hero">
 	<div class="container">
 		<h1>Irish Prize Bonds Checker</h1>
-		<p class="lead">Check the latest Prize Bond draw results, browse the full history, and see if your numbers have won — free, fast, and mobile-friendly.</p>
+		<p class="lead">Check your Prize Bond numbers against every draw, track the latest results as they are published, and browse the full draw history — free, fast, and mobile-friendly.</p>
 		<div class="actions">
 			<a href="<?php echo base_url(); ?>search/checker/" class="btn btn-primary">Check My Numbers</a>
-			<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-secondary">View Draw Archive</a>
+			<a href="<?php echo base_url(); ?>results/" class="btn btn-secondary">Latest Results</a>
+			<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-secondary">Draw Archive</a>
 		</div>
 	</div>
 </div>
@@ -78,8 +79,8 @@
 
 	<h2>About This Site</h2>
 	<p>
-		Irish Prize Bonds is a free, independent checker for Ireland's Prize Bond draws. Every bond you hold has its
-		own unique number and its own chance to win in the <a href="<?php echo base_url(); ?>schedule/">weekly draw</a>,
+		Irish Prize Bonds is a free, independent checker and results tracker for Ireland's Prize Bond draws. Every
+		bond you hold has its own unique number and its own chance to win in the <a href="<?php echo base_url(); ?>schedule/">weekly draw</a>,
 		with an extra &euro;500,000 jackpot on the last draw of each month. Rather than making you dig through one
 		draw at a time, we track results across every draw we cover, so you can search your numbers in one place,
 		browse the <a href="<?php echo base_url(); ?>results/archive/">full draw archive</a>, and see statistics —

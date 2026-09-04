@@ -1,5 +1,17 @@
 <?php $this->load->view('website/header', array('title' => $title, 'description' => $description)); ?>
 
+<script type="application/ld+json">
+<?php echo json_encode(array(
+	'@context' => 'https://schema.org',
+	'@type' => 'BreadcrumbList',
+	'itemListElement' => array(
+		array('@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => base_url()),
+		array('@type' => 'ListItem', 'position' => 2, 'name' => 'Results', 'item' => base_url('results/')),
+		array('@type' => 'ListItem', 'position' => 3, 'name' => date('j F Y', strtotime($draw->draw_date)) . ' Draw', 'item' => base_url('results/view/' . $draw->draw_date . '/')),
+	),
+), JSON_UNESCAPED_SLASHES); ?>
+</script>
+
 <div class="container">
 
 	<div class="grid-2" style="align-items:start;">

@@ -1,7 +1,20 @@
 <?php $this->load->view('website/header', array('title' => $title, 'description' => $description)); ?>
 
+<script type="application/ld+json">
+<?php echo json_encode(array(
+	'@context' => 'https://schema.org',
+	'@type' => 'WebApplication',
+	'name' => 'Irish Prize Bonds Number Checker',
+	'url' => base_url('search/checker/'),
+	'applicationCategory' => 'FinanceApplication',
+	'operatingSystem' => 'Any',
+	'offers' => array('@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'EUR'),
+	'description' => 'Free tool to check Irish Prize Bond numbers against every published draw result.',
+), JSON_UNESCAPED_SLASHES); ?>
+</script>
+
 <div class="container">
-	<h1>Check Your Prize Bond Numbers</h1>
+	<h1>Check Your Prize Bond Numbers Online</h1>
 	<p class="lead-paragraph">
 		Enter up to five Prize Bond numbers below and we'll check each one against every draw result we have on
 		file — not just the most recent draw. Each bond you own has its own unique number (a short letter prefix
@@ -67,6 +80,18 @@
 	<p class="text-muted">
 		Checking more than five numbers or ranges? Use <a href="<?php echo base_url(); ?>search/power/">Power Search</a> to paste a longer list,
 		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
+	</p>
+
+	<h2>How to check your Prize Bonds</h2>
+	<ol>
+		<li>Find your bond numbers on your Prize Bond certificate or in your State Savings online account &mdash; each is a 2&ndash;3 letter prefix followed by six digits (e.g. <code>AHU176759</code>).</li>
+		<li>Enter each number in a row above. If a certificate covers a block of consecutive bonds, put the first number in the left box and the last in the right box to check the whole range at once.</li>
+		<li>Select <strong>Check Numbers</strong>. Every number is matched against all published draw results we hold, going back through the full <a href="<?php echo base_url(); ?>results/archive/">archive</a> &mdash; not just the most recent draw.</li>
+		<li>Any prize is shown with its value, the draw date and the winning location. Unclaimed Prize Bond prizes do not expire, so it is worth checking older draws too.</li>
+	</ol>
+	<p class="text-muted">
+		This is an independent checker. To claim a prize or update your bank details, use the official
+		<a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a> site.
 	</p>
 </div>
 

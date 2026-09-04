@@ -29,8 +29,8 @@ class Home extends CI_Controller {
 				->where('draw_id', $data['last_draw']->id)->order_by('prize_value', 'desc')->limit(4)->get()->result();
 		}
 
-		$data['title'] = 'Irish Prize Bonds - Draw Results & Number Checker';
-		$data['description'] = 'Check Irish Prize Bond draw results, browse the draw archive and search your Prize Bond numbers.';
+		$data['title'] = 'Irish Prize Bonds Checker - Results Tracker and Number Search';
+		$data['description'] = 'Free Irish Prize Bonds checker and results tracker. Check your Prize Bond numbers against every draw, see the latest results and browse the full draw archive.';
 		$this->load->view('home', $data);
 	}
 

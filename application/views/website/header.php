@@ -57,8 +57,9 @@
 				<a href="<?php echo base_url(); ?>">Home</a>
 
 				<div class="nav-dropdown">
-					<a href="<?php echo base_url(); ?>results/archive/">Results &#9662;</a>
+					<a href="<?php echo base_url(); ?>results/">Results &#9662;</a>
 					<div class="nav-dropdown-menu">
+						<a href="<?php echo base_url(); ?>results/">Latest Results</a>
 						<a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>
 						<a href="<?php echo base_url(); ?>schedule/">Draw Dates</a>
 						<a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a>

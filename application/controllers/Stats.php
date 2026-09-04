@@ -39,8 +39,8 @@ class Stats extends CI_Controller {
 		$data['page'] = $page;
 		$data['total_pages'] = $total_pages;
 
-		$data['title'] = 'Big Prize Bond Winners | Irish Prize Bonds';
-		$data['description'] = 'Every €50,000 top prize and €500,000 jackpot winner across all Irish Prize Bond draws we track.';
+		$data['title'] = 'Prize Bond Winners List - Every Big Winner | Irish Prize Bonds';
+		$data['description'] = 'A running list of Irish Prize Bond winners: every €50,000 top prize and €500,000 monthly jackpot winner across all the draws we track, with dates and locations.';
 		$this->load->view('stats_winners', $data);
 	}
 

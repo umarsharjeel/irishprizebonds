@@ -10,15 +10,42 @@ class Results extends CI_Controller {
 		parent::__construct();
 	}
 
+	/**
+	 * Stable "Irish Prize Bond Results" landing page.
+	 *
+	 * Previously this 301-redirected straight to the latest dated draw, which
+	 * left the recurring "prize bonds results" / "irish prize bonds results"
+	 * search intent with no permanent URL to rank — the target changed address
+	 * every week. This hub keeps a fixed URL, leads with the newest published
+	 * draw, and lists recent draws, so it can accrue ranking signal over time
+	 * while still getting the visitor to today's numbers in one click.
+	 */
 	public function index()
 	{
-		$latest = $this->db->select('draw_date')->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->limit(1)->get()->row();
-		if ($latest) {
-			redirect('results/view/' . $latest->draw_date);
+		$latest = $this->db->select('*')->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->limit(1)->get()->row();
+
+		if (!$latest) {
+			$data['title'] = 'Irish Prize Bond Results | Irish Prize Bonds';
+			$data['description'] = 'Latest Irish Prize Bond draw results.';
+			$this->load->view('results_empty', $data);
+			return;
 		}
-		$data['title'] = 'Prize Bond Draw Results | Irish Prize Bonds';
-		$data['description'] = 'Latest Irish Prize Bond draw results.';
-		$this->load->view('results_empty', $data);
+
+		$data['latest'] = $latest;
+		$data['top_tiers'] = $this->db->select('prize_value, prize_count')->from('draw_prize_tiers')
+			->where('draw_id', $latest->id)->order_by('prize_value', 'desc')->limit(5)->get()->result();
+		$data['recent'] = $this->db->select('draw_date, is_jackpot, total_prize_fund, total_prizes_count')
+			->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->limit(13)->get()->result();
+
+		$latest_label = date('j F Y', strtotime($latest->draw_date));
+		// Static title on purpose: this page's value is being a fixed target for
+		// "irish prize bond results", so the <title> must not churn week to week
+		// (and must stay distinct from the dated results/view/<date> title). The
+		// live draw date lives in the H1/body and meta description instead.
+		$data['title'] = 'Irish Prize Bond Results - Latest and Recent Draws | Irish Prize Bonds';
+		$data['description'] = 'Latest Irish Prize Bond results from the ' . $latest_label . ' draw, updated after every weekly draw, plus a list of recent draws and the full archive.';
+
+		$this->load->view('results_hub', $data);
 	}
 
 	public function archive()
@@ -159,8 +186,8 @@ class Results extends CI_Controller {
 		$data['prev_draw'] = $this->db->select('draw_date')->from('draws')->where('draw_date <', $draw_date)->order_by('draw_date', 'desc')->limit(1)->get()->row();
 		$data['next_draw'] = $this->db->select('draw_date')->from('draws')->where('draw_date >', $draw_date)->order_by('draw_date', 'asc')->limit(1)->get()->row();
 
-		$data['title'] = 'Prize Bond Draw Result ' . date('d F Y', strtotime($draw->draw_date)) . ' | Irish Prize Bonds';
-		$data['description'] = 'Full results for the Irish Prize Bond draw held on ' . date('d F Y', strtotime($draw->draw_date)) . '.';
+		$data['title'] = 'Irish Prize Bond Results - ' . date('j F Y', strtotime($draw->draw_date)) . ' Draw | Irish Prize Bonds';
+		$data['description'] = 'Full Irish Prize Bond results for the ' . date('j F Y', strtotime($draw->draw_date)) . ' draw: top prize winners, the complete prize breakdown and winning bond numbers by location.';
 
 		$this->load->view('results_view', $data);
 	}

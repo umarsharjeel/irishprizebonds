@@ -2,7 +2,7 @@
 
 <div class="container">
 	<div class="content-page-body">
-		<h1>Prize Bond Draw Dates &amp; Schedule</h1>
+		<h1>Prize Bond Draw Dates: When Is the Next Draw?</h1>
 
 		<p>
 			Irish Prize Bond draws are held <strong>every week</strong>. On the <strong>last draw of each calendar month</strong>,
