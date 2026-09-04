@@ -50,8 +50,10 @@ body > main { flex: 1 0 auto; }
 
 /* Breathing room below the sticky header for pages that go straight into
    a .container (no .hero). The hero block supplies its own padding, so
-   this only targets pages where .container is main's first child. */
-main > .container:first-child { padding-top: 28px; }
+   this only targets pages where .container is the first div in main --
+   :first-of-type (not :first-child) so a leading JSON-LD <script> before
+   the .container doesn't disable it. */
+main > .container:first-of-type { padding-top: 28px; }
 main > .container:last-child { padding-bottom: 32px; }
 
 .container {
