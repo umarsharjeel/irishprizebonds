@@ -16,8 +16,8 @@
 		<ul>
 			<li><strong>Contact form submissions</strong> — the name, email address and message you provide when you use our <a href="<?php echo base_url(); ?>contact-us/">Contact Us</a> page, along with your IP address and the time of submission (used for spam prevention).</li>
 			<li><strong>Basic technical data</strong> — standard web server logs (IP address, browser type, pages requested). A session cookie is set only on the specific pages that need it (currently just our <a href="<?php echo base_url(); ?>contact-us/">Contact Us</a> form) — most pages on this site set no cookie at all.</li>
-			<li><strong>Analytics</strong> — we use Google Analytics (GA4) to understand how the site is used. For visitors in the EEA, UK and Switzerland, analytics storage stays disabled until you accept it through our cookie consent banner (provided by CookieYes, a Google-certified consent management platform); in other regions analytics runs by default. See "Cookies" below.</li>
-			<li><strong>Advertising</strong> — we display ads through Google AdSense. Google and its partners may set cookies to serve and measure ads. In the EEA, UK and Switzerland this happens only with your consent, collected via our cookie consent banner.</li>
+			<li><strong>Analytics</strong> — we use Google Analytics (GA4) to understand how the site is used. For visitors in the EEA, UK and Switzerland, analytics storage stays disabled until you make a choice in the consent message shown on your first visit; in other regions analytics runs by default. See "Cookies" below.</li>
+			<li><strong>Advertising</strong> — we display ads through Google AdSense. Google and its partners may set cookies to serve and measure ads. In the EEA, UK and Switzerland this happens only with your consent, collected via Google's consent message.</li>
 		</ul>
 		<p>
 			We do <strong>not</strong> collect any information about Prize Bonds you own, your identity as a bondholder,
@@ -27,15 +27,14 @@
 		<h2>Cookies</h2>
 		<p>We use the following categories of cookies and similar storage:</p>
 		<ul>
-			<li><strong>Essential</strong> — a session cookie, set only on the pages that genuinely need it (e.g. submitting our Contact Us form), required for those features to work and not disableable without breaking them. Our cookie consent banner also stores a cookie recording your consent choice, so you aren't asked again on every visit.</li>
-			<li><strong>Analytics</strong> — set by Google Analytics (GA4) to measure aggregate site usage. In the EEA, UK and Switzerland these are not set until you consent through our cookie consent banner; in other regions they are set by default.</li>
-			<li><strong>Advertising</strong> — set by Google AdSense and its partners to serve and measure ads. In the EEA, UK and Switzerland these are used only with your consent via our cookie consent banner.</li>
+			<li><strong>Essential</strong> — a session cookie, set only on the pages that genuinely need it (e.g. submitting our Contact Us form), required for those features to work and not disableable without breaking them.</li>
+			<li><strong>Analytics</strong> — set by Google Analytics (GA4) to measure aggregate site usage. In the EEA, UK and Switzerland these are not set until you consent through Google's consent message; in other regions they are set by default.</li>
+			<li><strong>Advertising</strong> — set by Google AdSense and its partners to serve and measure ads. In the EEA, UK and Switzerland these are used only with your consent via Google's consent message.</li>
 		</ul>
 		<p>
-			Visitors in the EEA, UK and Switzerland are shown a cookie consent banner (provided by CookieYes, a
-			Google-certified consent management platform) on their first visit, and can review or withdraw that choice
-			at any time using the cookie-settings control on that banner. You can also block or delete cookies through
-			your browser settings.
+			Visitors in the EEA, UK and Switzerland are shown a Google-certified consent message on their first visit
+			and can review or withdraw that choice at any time from the settings in that message. You can also block or
+			delete cookies through your browser settings.
 		</p>
 
 		<h2>Why we process this data</h2>
@@ -48,8 +47,7 @@
 		<h2>Who we share data with</h2>
 		<p>
 			We don't sell or rent your personal data. Usage and advertising data may be processed by Google (Analytics
-			and AdSense) under Google's own privacy policy. Your cookie-consent preferences are processed by CookieYes,
-			which provides our consent banner. We may also share data where required by law.
+			and AdSense) under Google's own privacy policy. We may also share data where required by law.
 		</p>
 
 		<h2>How long we keep data</h2>
@@ -69,8 +67,8 @@
 		</p>
 		<p>
 			Visitors in the EEA, UK and Switzerland can review or withdraw consent for analytics and advertising
-			cookies at any time through our cookie consent banner, and can block or clear cookies via their browser
-			settings.
+			cookies at any time through the settings in Google's consent message, and can block or clear cookies
+			via their browser settings.
 		</p>
 
 		<h2>Children's privacy</h2>
