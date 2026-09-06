@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<!-- Start cookieyes banner -->
+	<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/6e44fce2d804c37ac945e9d89499ceb6/script.js"></script>
+	<!-- End cookieyes banner -->
 	<title><?php echo isset($title) ? $title : 'Irish Prize Bonds'; ?></title>
 	<meta name="description" content="<?php echo isset($description) ? htmlspecialchars($description) : ''; ?>">
 	<meta content="width=device-width, initial-scale=1" name="viewport" />
