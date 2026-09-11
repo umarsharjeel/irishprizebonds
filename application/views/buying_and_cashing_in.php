@@ -12,7 +12,7 @@
 		</div>
 
 		<h2>How to buy Prize Bonds</h2>
-		<p>Prize Bonds can be bought through three channels:</p>
+		<p>Prize Bonds can be bought through four channels:</p>
 		<ul>
 			<li><strong>Online</strong> at <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a>, once you're a registered State Savings customer.</li>
 			<li><strong>In person</strong> at any Post Office.</li>
@@ -22,7 +22,8 @@
 		<p>
 			You can hold from as little as <strong>&euro;25 (4 bonds of &euro;6.25 each)</strong> up to a maximum of
 			<strong>&euro;250,000 (40,000 bonds)</strong> per person. Prize Bonds can also be bought as a gift for someone else,
-			including a child, through any of the same channels.
+			including a child &mdash; see <a href="<?php echo base_url(); ?>prize-bonds-for-children/">Buying Prize Bonds for a Child</a>
+			for the specific rules that apply to a gift for a minor.
 		</p>
 
 		<h2>Registering as a customer (first-time buyers)</h2>

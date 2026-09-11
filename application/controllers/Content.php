@@ -47,6 +47,14 @@ class Content extends CI_Controller {
 				'a' => 'Yes. Old Prize Bonds stay valid indefinitely and remain in every draw until they are cashed in, and unclaimed prizes never expire. Enter any bond number &mdash; however old &mdash; into our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool and it is matched against every published draw we hold. If you have lost the certificate for an old holding, the official <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a> site can trace it from your name and address.',
 			),
 			array(
+				'q' => 'What happens to Prize Bonds when the holder dies?',
+				'a' => 'They become part of the estate, the same as a bank account or shares &mdash; they don\'t automatically pass to next of kin or get cashed in on their own. Whoever is handling the estate needs to notify Ireland State Savings, after which the bonds can be transferred into the inheritor\'s name or cashed in. See our <a href="' . base_url() . 'unclaimed-and-inherited-prize-bonds">Unclaimed and Inherited Prize Bonds</a> guide for the full process, including when a Grant of Probate is required.',
+			),
+			array(
+				'q' => 'Can I buy Prize Bonds for a child?',
+				'a' => 'Yes &mdash; Prize Bonds are a common gift for children, since the capital stays fully safe and every bond keeps entering the weekly draw for as long as it\'s held. A parent or guardian handles the purchase and any transactions until the child turns 18, at which point full control transfers automatically. See <a href="' . base_url() . 'prize-bonds-for-children">Buying Prize Bonds for a Child</a> for the documents needed and how it works in practice.',
+			),
+			array(
 				'q' => 'How soon after a draw are the results published here?',
 				'a' => 'Prize Bond draws take place each week and the official results are released shortly afterwards. We import each new draw as soon as the official figures are available, usually within a day, so the <a href="' . base_url() . 'results">latest results</a> page and number checker stay current. There is no minute-by-minute live feed &mdash; draw results are a single published set, not a rolling broadcast.',
 			),
@@ -132,6 +140,105 @@ class Content extends CI_Controller {
 		$data['title'] = 'How to Buy and Cash In Irish Prize Bonds | Irish Prize Bonds';
 		$data['description'] = 'Step-by-step: how to buy Irish Prize Bonds online, by post office, or by phone, how first-time registration works, the 3-month rule before cashing in, and how to request repayment.';
 		$this->load->view('buying_and_cashing_in', $data);
+	}
+
+	public function unclaimed_and_inherited()
+	{
+		$data['title'] = 'Unclaimed and Inherited Prize Bonds | Irish Prize Bonds';
+		$data['description'] = 'What happens to Prize Bonds when the holder dies, how to claim or trace inherited bonds, when a Grant of Probate is needed, and why old bonds never expire.';
+		$this->load->view('unclaimed_and_inherited', $data);
+	}
+
+	public function prize_bonds_for_children()
+	{
+		$data['title'] = 'Buying Prize Bonds for a Child | Irish Prize Bonds';
+		$data['description'] = 'How to buy Irish Prize Bonds as a gift for a child: documents needed, who controls the bond while they are a minor, and what changes at 18.';
+		$this->load->view('prize_bonds_for_children', $data);
+	}
+
+	public function glossary()
+	{
+		$data['terms'] = array(
+			array(
+				'term' => 'Prize Bond',
+				'definition' => 'A savings product issued by the Irish state, sold in units of &euro;6.25, where each bond earns no interest but is entered into a weekly draw for a tax-free cash prize instead. See <a href="' . base_url() . 'how-it-works">How Prize Bonds Work</a>.',
+			),
+			array(
+				'term' => 'Bond Number',
+				'definition' => 'The unique reference for a single bond &mdash; a 2&ndash;3 letter prefix followed by six digits (e.g. <code>AHU176759</code>). Each bond you hold has its own separate number and its own independent chance to win every draw.',
+			),
+			array(
+				'term' => 'Draw',
+				'definition' => 'The weekly random selection of winning bond numbers, held every week. See the full <a href="' . base_url() . 'schedule">draw schedule</a>.',
+			),
+			array(
+				'term' => 'Jackpot Draw',
+				'definition' => 'The draw on the last Friday of each calendar month, which includes one extra &euro;500,000 top prize on top of the usual weekly tiers.',
+			),
+			array(
+				'term' => 'Prize Tier',
+				'definition' => 'One of the fixed prize amounts awarded in a draw (for example &euro;100,000, &euro;1,000, or &euro;100) along with how many winners received it. See a draw\'s full tier breakdown on any <a href="' . base_url() . 'results">results</a> page.',
+			),
+			array(
+				'term' => 'Prize Fund',
+				'definition' => 'The total amount paid out across every prize tier in a single draw. Recalculated monthly based on the total value of bonds in circulation and net sales that month &mdash; it isn\'t a fixed figure.',
+			),
+			array(
+				'term' => 'DIRT (Deposit Interest Retention Tax)',
+				'definition' => 'The 33% tax deducted at source from interest on an ordinary Irish deposit account. Prize Bond winnings are fully exempt from DIRT, along with Income Tax, PRSI and Capital Gains Tax. See <a href="' . base_url() . 'are-prize-bonds-worth-it">Are Prize Bonds Worth It?</a> for how that compares to a deposit account.',
+			),
+			array(
+				'term' => 'NTMA (National Treasury Management Agency)',
+				'definition' => 'The state body that has held overall responsibility for the Prize Bond scheme since 1990. See our <a href="' . base_url() . 'history">History</a> page.',
+			),
+			array(
+				'term' => 'Prize Bond Company',
+				'definition' => 'The company that has run the Prize Bond scheme on behalf of the Minister for Finance since 1989, with day-to-day administration (sales, prize payments, customer service) handled by An Post through Ireland State Savings, and overall oversight held by the NTMA since 1990. See our <a href="' . base_url() . 'history">History</a> page for the full timeline.',
+			),
+			array(
+				'term' => 'Ireland State Savings',
+				'definition' => 'The public-facing brand, operated through An Post, under which Prize Bonds and other Irish state savings products are sold, registered and administered. Their official site is <a href="https://www.statesavings.ie" target="_blank" rel="noopener">statesavings.ie</a>.',
+			),
+			array(
+				'term' => 'SSCN (State Savings Customer Number)',
+				'definition' => 'The customer number issued once you\'re registered with Ireland State Savings, needed before your first purchase. See <a href="' . base_url() . 'how-to-buy-and-cash-in">How to Buy and Cash In</a>.',
+			),
+			array(
+				'term' => 'Encashment / Repayment',
+				'definition' => 'Cashing a bond in for its face value. Once repaid, a bond becomes inactive and stops being entered into future draws.',
+			),
+			array(
+				'term' => '3-Month Rule',
+				'definition' => 'Newly purchased bonds must be held for a minimum of 3 months (90 days) before they can be cashed in. This only restricts encashment &mdash; a new bond is entered into draws immediately. Bonds received through reinvested winnings are exempt from this wait.',
+			),
+			array(
+				'term' => 'Reinvestment',
+				'definition' => 'Automatically using a prize win to buy new Prize Bonds in the winner\'s name, rather than paying it out to a bank account. This is the default if you haven\'t registered bank details.',
+			),
+			array(
+				'term' => 'Location',
+				'definition' => 'The county (or, for overseas holders, country) officially associated with a winning bond, as published by Ireland State Savings. See our <a href="' . base_url() . 'stats/counties">County Stats</a> page for how wins break down by location.',
+			),
+			array(
+				'term' => 'Nominated Parent/Guardian',
+				'definition' => 'The adult who must confirm any transaction &mdash; cashing in, claiming a prize, and so on &mdash; on a bond held by a minor, until the child turns 18. See <a href="' . base_url() . 'prize-bonds-for-children">Buying Prize Bonds for a Child</a>.',
+			),
+			array(
+				'term' => 'Grant of Probate',
+				'definition' => 'Court confirmation of a will\'s executor, required by Ireland State Savings only where a deceased person\'s sole-name holdings totalled &euro;25,000 or more. See <a href="' . base_url() . 'unclaimed-and-inherited-prize-bonds">Unclaimed and Inherited Prize Bonds</a>.',
+			),
+		);
+
+		$data['title'] = 'Glossary of Prize Bond Terms | Irish Prize Bonds';
+		$data['description'] = 'Plain-English definitions for Prize Bond terms: bond number, draw, jackpot, prize tier, DIRT, SSCN, encashment, and more.';
+		$this->load->view('glossary', $data);
+	}
+
+	public function data_sources()
+	{
+		$data['title'] = 'How We Source and Verify Our Draw Results | Irish Prize Bonds';
+		$data['description'] = 'Where our Irish Prize Bond draw results come from, how often they are updated, and what happens when a result cannot be confirmed yet.';
+		$this->load->view('data_sources', $data);
 	}
 
 	public function worth_it()

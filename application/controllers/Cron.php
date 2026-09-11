@@ -127,6 +127,14 @@ class Cron extends CI_Controller {
 			}
 
 			$tiers = statesavings_parse_prize_options($html);
+			if ($tiers === null) {
+				// HTTP 200 but not a real results page (e.g. a bot-challenge interstitial)
+				// — this draw row was already confirmed by _confirm_available_draws() via a
+				// separate, valid fetch, so do NOT delete it on this unrelated fetch being
+				// blocked. Just retry discovery next run.
+				echo "Couldn't discover tiers for {$draw->draw_date} — doesn't look like a valid response. Will retry next run.\n";
+				return;
+			}
 			if (empty($tiers)) {
 				// No draw was actually held on this date (e.g. skipped week) — remove the placeholder row.
 				$this->db->where('id', $draw->id)->delete('draws');
@@ -181,12 +189,23 @@ class Cron extends CI_Controller {
 				break;
 			}
 
-			$this->db->trans_start();
-
 			$total_pages = $tier_row->total_pages;
 			if ($total_pages === null) {
 				$total_count = statesavings_parse_total_count($html);
+				if ($total_count === null) {
+					// Same soft-failure case as the live-draw-discovery fetch (see
+					// _confirm_available_draws()): HTTP 200 but not a real results page
+					// (e.g. a bot-challenge interstitial). Don't record a bogus
+					// total_pages from it — retry this page next run instead.
+					echo "Couldn't read a winner count from tier {$tier_row->prize_value} page {$tier_row->next_page} — doesn't look like a valid response. Will retry next run.\n";
+					break;
+				}
 				$total_pages = max(1, (int) ceil($total_count / 10));
+			}
+
+			$this->db->trans_start();
+
+			if ($tier_row->total_pages === null) {
 				$this->db->where('id', $tier_row->id)->update('draw_import_progress', array(
 					'total_count' => $total_count,
 					'total_pages' => $total_pages,
@@ -194,6 +213,19 @@ class Cron extends CI_Controller {
 			}
 
 			$rows = statesavings_parse_rows($html);
+			if ($rows === null) {
+				// HTTP 200 but not a real results page (e.g. a bot-challenge interstitial).
+				// Can only happen here when $tier_row->total_pages was already known coming
+				// in (so the write above was skipped) — if it were still being discovered
+				// this run, the identical $html would have already failed the same
+				// validity check inside statesavings_parse_total_count() above and broken
+				// out before trans_start(). So this is always page 2+ of a tier: exactly
+				// the case that had no validation at all before this fix. Treat like a
+				// failed fetch — don't touch next_page/done, just retry next run.
+				$this->db->trans_complete();
+				echo "Couldn't read winners for tier {$tier_row->prize_value} page {$tier_row->next_page} — doesn't look like a valid response. Will retry next run.\n";
+				break;
+			}
 			$batch = array();
 			foreach ($rows as $row) {
 				list($bond_number, $location_name) = $row;
@@ -326,7 +358,21 @@ class Cron extends CI_Controller {
 				break; // request failed — retry from this date on the next run
 			}
 
-			if (statesavings_parse_total_count($html) > 0) {
+			$total_count = statesavings_parse_total_count($html);
+			if ($total_count === null) {
+				// Fetch "succeeded" (HTTP 200) but the body doesn't look like a real
+				// results response — e.g. a bot-challenge interstitial returned with a
+				// 200 status. Treat the same as a hard failure: stop and retry this
+				// date next run, rather than caching a wrong "no draw" verdict below.
+				// Echoed (unlike the plain $html === null break above) because this is
+				// the specific failure mode that previously went unnoticed for days —
+				// a persistent block here should be visible in the run's own output,
+				// not just inferable from the absence of a "Confirmed..." line.
+				echo "Couldn't confirm {$date} — doesn't look like a valid response. Will retry next run.\n";
+				break;
+			}
+
+			if ($total_count > 0) {
 				$this->_confirm_draw_date($date);
 				$confirmed++;
 				break; // one confirmed draw is all a single check needs to find

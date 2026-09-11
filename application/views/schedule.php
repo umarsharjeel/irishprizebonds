@@ -30,10 +30,26 @@
 
 		<h2>How the schedule works</h2>
 		<ul>
-			<li><strong>Weekly draws:</strong> every week, prizes range from &euro;100 up to &euro;100,000.</li>
-			<li><strong>Monthly jackpot:</strong> the last draw of each month adds a &euro;500,000 top prize.</li>
+			<li><strong>Weekly draws:</strong> every Friday, prizes range from &euro;100 up to &euro;100,000.</li>
+			<li><strong>Monthly jackpot:</strong> the last Friday of each month adds a &euro;500,000 top prize &mdash; 12 jackpot draws a year, one per calendar month.</li>
 			<li><strong>Prize fund:</strong> recalculated at the end of every month based on net Prize Bond sales, which is why the number of smaller prizes varies slightly month to month.</li>
 		</ul>
+
+		<h2>When a draw date moves</h2>
+		<p>
+			Draws almost always fall on a Friday, but a bank holiday around Christmas, New Year, or Easter
+			(Good Friday itself is a bank holiday) can shift a specific week's draw by a day or two either way. We don't
+			guess these shifts in advance &mdash; the <a href="<?php echo base_url(); ?>results/">Latest Results</a> and
+			archive only ever show a draw once statesavings.ie has actually confirmed it, so the date here is never a
+			calendar assumption.
+		</p>
+
+		<h2>Why "pending" instead of a result</h2>
+		<p>
+			A draw shown as pending simply means it's been held but the full results aren't published yet &mdash; usually
+			resolved within a day. See <a href="<?php echo base_url(); ?>how-we-source-our-data/">How We Source and Verify Our Draw Results</a>
+			for exactly how results get from statesavings.ie onto this site.
+		</p>
 
 		<p>
 			See the full <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for past results, or read

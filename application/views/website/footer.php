@@ -26,9 +26,13 @@
 						<li><a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a></li>
 						<li><a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy &amp; Cash In</a></li>
 						<li><a href="<?php echo base_url(); ?>are-prize-bonds-worth-it/">Are They Worth It?</a></li>
+						<li><a href="<?php echo base_url(); ?>prize-bonds-for-children/">Prize Bonds for Children</a></li>
+						<li><a href="<?php echo base_url(); ?>unclaimed-and-inherited-prize-bonds/">Unclaimed &amp; Inherited</a></li>
 						<li><a href="<?php echo base_url(); ?>history/">History</a></li>
+						<li><a href="<?php echo base_url(); ?>glossary/">Glossary</a></li>
 						<li><a href="<?php echo base_url(); ?>faq/">FAQ</a></li>
 						<li><a href="<?php echo base_url(); ?>about/">About This Site</a></li>
+						<li><a href="<?php echo base_url(); ?>how-we-source-our-data/">How We Source Our Data</a></li>
 						<li><a href="<?php echo base_url(); ?>contact-us/">Contact Us</a></li>
 						<li><a href="<?php echo base_url(); ?>privacy-policy/">Privacy Policy</a></li>
 						<li><a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Official Site (statesavings.ie)</a></li>

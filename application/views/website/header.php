@@ -82,9 +82,13 @@
 						<a href="<?php echo base_url(); ?>how-it-works/">How It Works</a>
 						<a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to Buy &amp; Cash In</a>
 						<a href="<?php echo base_url(); ?>are-prize-bonds-worth-it/">Are They Worth It?</a>
+						<a href="<?php echo base_url(); ?>prize-bonds-for-children/">Prize Bonds for Children</a>
+						<a href="<?php echo base_url(); ?>unclaimed-and-inherited-prize-bonds/">Unclaimed &amp; Inherited</a>
 						<a href="<?php echo base_url(); ?>history/">History</a>
+						<a href="<?php echo base_url(); ?>glossary/">Glossary</a>
 						<a href="<?php echo base_url(); ?>faq/">FAQ</a>
 						<a href="<?php echo base_url(); ?>about/">About</a>
+						<a href="<?php echo base_url(); ?>how-we-source-our-data/">How We Source Our Data</a>
 						<a href="<?php echo base_url(); ?>contact-us/">Contact Us</a>
 					</div>
 				</div>
