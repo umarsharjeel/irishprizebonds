@@ -12,9 +12,9 @@ class Xcrud_config
 
     public static $dbname = 'irelandprizebonds'; // Your database name
 
-    public static $dbuser = 'root'; // Your database username
+    public static $dbuser = 'umarsharjeel'; // Your database username
 
-    public static $dbpass = ''; // // Your database password
+    public static $dbpass = 'SBM5pw3xHb=^'; // // Your database password
 
     public static $dbhost = 'localhost'; // Your database host, 'localhost' is default.
 
