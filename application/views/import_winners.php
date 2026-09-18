@@ -16,6 +16,13 @@
                                     <?php if ($result['inserted'] > 0): ?>
                                         <div class="alert alert-success">
                                             Imported <strong><?php echo $result['inserted'] ?></strong> of <?php echo $result['total_lines'] ?> lines successfully.
+                                            This draw now has <strong><?php echo $result['draw_total'] ?></strong> winner(s)<?php echo !empty($result['published']) ? ' and has been <strong>published</strong>' : '' ?>.
+                                            <?php if (!empty($result['duplicates'])): ?>
+                                                <br><?php echo $result['duplicates'] ?> row(s) were already recorded for this draw and were left as they were.
+                                            <?php endif; ?>
+                                            <?php if (!empty($result['created_locations'])): ?>
+                                                <br>New location(s) added: <?php echo htmlspecialchars(implode(', ', array_unique($result['created_locations']))) ?>.
+                                            <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
                                     <?php if (!empty($result['errors'])): ?>
@@ -31,8 +38,11 @@
                                 <?php endif; ?>
 
                                 <p class="text-muted">
-                                    Paste or upload winner rows for a single draw. Each row: <code>bond_number, prize_value, location</code>
-                                    (location is optional; tab or comma separated; a header row is auto-detected and skipped).
+                                    Paste or upload winner rows for a single draw. Either a header row naming the columns
+                                    (<code>bond_number, prize_value, location</code> and optionally <code>draw_date</code>, in any order —
+                                    rows dated for a different draw are skipped), or plain rows in the order
+                                    <code>bond_number, prize_value, location</code> (location is optional). Tab or comma separated;
+                                    <code>&euro;1,000.00</code>-style prize values and quoted CSV are fine. Locations not listed below are added automatically.
                                 </p>
 
                                 <form method="post" enctype="multipart/form-data">
@@ -57,6 +67,10 @@
                                     </div>
 
                                     <p class="text-muted">Known locations: <?php echo implode(', ', array_map(function($l){ return $l->name; }, $locations)) ?></p>
+
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="publish_after" value="1"> Publish this draw after importing</label>
+                                    </div>
 
                                     <button type="submit" name="do_import" value="1" class="btn btn-primary">Import</button>
                                 </form>

@@ -22,6 +22,116 @@ function db_insert_batch_ignore($db, $table, $batch)
 }
 
 /**
+ * Normalises one cell of a winners import: collapses whitespace (incl. NBSP)
+ * and drops the mobile-only label statesavings.ie's results table repeats
+ * inside every cell ("Winning Prize Bond ZF816367") — a copy/scrape of the
+ * page can carry it along with the value.
+ */
+function clean_winners_import_cell($value)
+{
+  $value = trim(preg_replace('/(?:\s|\xC2\xA0)+/', ' ', (string) $value));
+  return trim(preg_replace('/^(?:prize value|winning prize bond|location)\s+(?=\S)/i', '', $value));
+}
+
+/**
+ * Parses pasted/uploaded winner rows for Dashboard::import_winners into
+ * normalised rows, without touching the database.
+ *
+ * Accepts either the original positional layout (bond_number, prize_value,
+ * location — comma or tab separated, optional header) or any file whose first
+ * row names its columns (bond_number / winning prize bond, prize_value / prize
+ * value, location, and an optional draw_date), in any order — so a CSV
+ * exported from statesavings.ie's results table imports as-is. Handles a UTF-8
+ * BOM, quoted CSV fields and "€1,000.00"-style prize values. Rows whose
+ * draw_date is present but isn't $expected_draw_date are skipped and counted in
+ * 'wrong_date' rather than imported into the wrong draw.
+ *
+ * Returns array(
+ *   'rows'        => array of array('bond', 'prize', 'location', 'line'),
+ *   'errors'      => array of "Line N: ..." strings for rows that failed validation,
+ *   'total_lines' => non-blank lines in the input (header included),
+ *   'wrong_date'  => number of rows skipped for a mismatched draw_date,
+ * )
+ */
+function parse_winners_import($raw, $expected_draw_date)
+{
+  $raw = trim(preg_replace('/^\xEF\xBB\xBF/', '', (string) $raw));
+  $lines = array_values(array_filter(preg_split('/\r\n|\r|\n/', $raw), function ($l) { return trim($l) !== ''; }));
+  $out = array('rows' => array(), 'errors' => array(), 'total_lines' => count($lines), 'wrong_date' => 0);
+  if (empty($lines)) {
+    return $out;
+  }
+
+  // A tab-separated line (pasted from a spreadsheet or the site's own table) can contain
+  // commas inside a cell ("€1,000.00"); anything else is real CSV, quotes and all.
+  $split = function ($line) {
+    return strpos($line, "\t") !== false ? explode("\t", $line) : str_getcsv($line, ',', '"', '\\');
+  };
+  $to_number = function ($v) { return str_replace(array('€', ',', ' '), '', $v); };
+
+  $aliases = array(
+    'bond' => 'bond', 'bondnumber' => 'bond', 'winningprizebond' => 'bond', 'prizebond' => 'bond', 'prizebondnumber' => 'bond',
+    'prize' => 'prize', 'prizevalue' => 'prize', 'value' => 'prize',
+    'location' => 'location',
+    'drawdate' => 'date', 'date' => 'date',
+  );
+  $first = $split($lines[0]);
+  $map = array();
+  foreach ($first as $i => $cell) {
+    $key = preg_replace('/[^a-z]/', '', strtolower($cell));
+    if (isset($aliases[$key]) && !isset($map[$aliases[$key]])) {
+      $map[$aliases[$key]] = $i;
+    }
+  }
+
+  if (isset($map['bond']) && isset($map['prize'])) {
+    array_shift($lines); // named header row
+  } else {
+    $map = array('bond' => 0, 'prize' => 1, 'location' => 2);
+    // Original behaviour: an unnamed header row is one whose 2nd column isn't numeric.
+    if (isset($first[1]) && !is_numeric($to_number(clean_winners_import_cell($first[1])))) {
+      array_shift($lines);
+    }
+  }
+
+  $cell = function ($cols, $field) use ($map) {
+    return (isset($map[$field]) && isset($cols[$map[$field]])) ? clean_winners_import_cell($cols[$map[$field]]) : '';
+  };
+
+  $line_no = $out['total_lines'] - count($lines); // account for the header row in reported line numbers
+  foreach ($lines as $line) {
+    $line_no++;
+    $cols = $split($line);
+
+    if (isset($map['date'])) {
+      $date = $cell($cols, 'date');
+      $ts = $date === '' ? false : strtotime($date);
+      if ($date !== '' && ($ts === false || date('Y-m-d', $ts) !== $expected_draw_date)) {
+        $out['wrong_date']++;
+        continue;
+      }
+    }
+
+    $bond = strtoupper(str_replace(' ', '', $cell($cols, 'bond')));
+    $prize_raw = $cell($cols, 'prize');
+    $prize = $to_number($prize_raw);
+
+    if (!preg_match('/^[A-Z0-9]{4,10}$/', $bond)) {
+      $out['errors'][] = "Line $line_no: invalid bond number \"$bond\"";
+      continue;
+    }
+    if ($prize === '' || !is_numeric($prize)) {
+      $out['errors'][] = "Line $line_no: invalid prize value \"$prize_raw\" for bond $bond";
+      continue;
+    }
+
+    $out['rows'][] = array('bond' => $bond, 'prize' => $prize, 'location' => $cell($cols, 'location'), 'line' => $line_no);
+  }
+
+  return $out;
+}
+
+/**
  * Prize Bond numbers are always a 2-3 letter prefix followed by exactly 6
  * digits (e.g. AHU176759, OY599204). A single old-style certificate can cover
  * a whole consecutively-numbered block of bonds, so — matching (and

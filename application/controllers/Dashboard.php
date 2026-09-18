@@ -49,10 +49,8 @@ class Dashboard extends CI_Controller {
 	private function _process_winners_import()
 	{
 		$draw_id = (int) $this->input->post('draw_id');
-		$errors = array();
-		$inserted = 0;
 
-		$draw = $this->db->select('id')->from('draws')->where('id', $draw_id)->get()->row();
+		$draw = $this->db->select('id, draw_date')->from('draws')->where('id', $draw_id)->get()->row();
 		if (!$draw) {
 			return array('errors' => array('Please select a valid draw before importing.'), 'inserted' => 0, 'total_lines' => 0);
 		}
@@ -64,69 +62,57 @@ class Dashboard extends CI_Controller {
 			$raw = $this->input->post('paste_data');
 		}
 
-		$raw = trim((string) $raw);
-		if ($raw === '') {
+		if (trim((string) $raw) === '') {
 			return array('errors' => array('No data provided. Paste CSV data or upload a file.'), 'inserted' => 0, 'total_lines' => 0);
 		}
 
-		// Normalize line endings and split
-		$lines = preg_split('/\r\n|\r|\n/', $raw);
-		$lines = array_filter($lines, function ($l) { return trim($l) !== ''; });
-		$lines = array_values($lines);
-		$total_lines = count($lines);
+		// Column layout, quoting, BOM, "€1,000.00" values etc. are all handled in
+		// parse_winners_import() (general_helper.php) — this method only deals with the database.
+		$parsed = parse_winners_import($raw, $draw->draw_date);
+		$errors = $parsed['errors'];
+		if ($parsed['wrong_date'] > 0) {
+			$errors[] = $parsed['wrong_date'] . " row(s) skipped: their draw_date isn't " . $draw->draw_date . ' (the draw selected above)';
+		}
 
 		// Preload locations for case-insensitive lookup
-		$locations_result = $this->db->select('id, name')->from('locations')->get()->result();
 		$location_map = array();
-		foreach ($locations_result as $loc) {
+		foreach ($this->db->select('id, name')->from('locations')->get()->result() as $loc) {
 			$location_map[strtolower(trim($loc->name))] = $loc->id;
 		}
-
-		// Detect and skip a header row: if 2nd column of first line isn't numeric
-		$first_cols = preg_split('/[,\t]/', $lines[0]);
-		if (isset($first_cols[1]) && !is_numeric(str_replace(array('€', ','), '', trim($first_cols[1])))) {
-			array_shift($lines);
-		}
+		$created_locations = array();
 
 		$batch = array();
+		$valid_rows = 0;
+		$inserted = 0;
 		$batch_size = 1000;
-		$line_no = $total_lines - count($lines); // account for header offset in reporting
 
-		foreach ($lines as $line) {
-			$line_no++;
-			$cols = preg_split('/[,\t]/', $line);
-			$bond_number = isset($cols[0]) ? strtoupper(trim($cols[0])) : '';
-			$prize_value_raw = isset($cols[1]) ? trim($cols[1]) : '';
-			$location_name = isset($cols[2]) ? trim($cols[2]) : '';
-
-			$prize_value = str_replace(array('€', ','), '', $prize_value_raw);
-
-			if (!preg_match('/^[A-Z0-9]{4,10}$/', $bond_number)) {
-				$errors[] = "Line $line_no: invalid bond number \"$bond_number\"";
-				continue;
-			}
-			if ($prize_value === '' || !is_numeric($prize_value)) {
-				$errors[] = "Line $line_no: invalid prize value \"$prize_value_raw\" for bond $bond_number";
-				continue;
-			}
-
+		foreach ($parsed['rows'] as $row) {
 			$location_id = null;
-			if ($location_name !== '') {
-				$key = strtolower($location_name);
-				if (isset($location_map[$key])) {
-					$location_id = $location_map[$key];
-				} else {
-					$errors[] = "Line $line_no: unrecognized location \"$location_name\" for bond $bond_number (row skipped)";
-					continue;
+			if ($row['location'] !== '') {
+				$key = strtolower($row['location']);
+				if (!isset($location_map[$key])) {
+					// Same as the cron: statesavings.ie reports overseas winners by their actual
+					// country/place ("U.K", "Australia"...), so an unseen name is a genuine new
+					// location rather than bad data. `name` is UNIQUE, so INSERT IGNORE is safe.
+					$this->db->query("INSERT IGNORE INTO locations (name) VALUES (?)", array($row['location']));
+					$loc = $this->db->select('id')->from('locations')->where('name', $row['location'])->get()->row();
+					if (!$loc) {
+						$errors[] = 'Line ' . $row['line'] . ": could not create location \"" . $row['location'] . '" for bond ' . $row['bond'] . ' (row skipped)';
+						continue;
+					}
+					$location_map[$key] = $loc->id;
+					$created_locations[] = $row['location'];
 				}
+				$location_id = $location_map[$key];
 			}
 
 			$batch[] = array(
 				'draw_id' => $draw_id,
-				'bond_number' => $bond_number,
-				'prize_value' => $prize_value,
+				'bond_number' => $row['bond'],
+				'prize_value' => $row['prize'],
 				'location_id' => $location_id,
 			);
+			$valid_rows++;
 
 			if (count($batch) >= $batch_size) {
 				db_insert_batch_ignore($this->db, 'draw_winners', $batch);
@@ -140,15 +126,31 @@ class Dashboard extends CI_Controller {
 			$inserted += $this->db->affected_rows();
 		}
 
+		$published = false;
+		$draw_total = null;
 		if ($inserted > 0) {
 			$totals = $this->db->select('COUNT(*) as cnt, SUM(prize_value) as total')->from('draw_winners')->where('draw_id', $draw_id)->get()->row();
-			$this->db->where('id', $draw_id)->update('draws', array(
+			$update = array(
 				'total_prizes_count' => $totals->cnt,
 				'total_prize_fund' => $totals->total,
-			));
+			);
+			if ($this->input->post('publish_after')) {
+				$update['published'] = 1;
+				$published = true;
+			}
+			$this->db->where('id', $draw_id)->update('draws', $update);
+			$draw_total = (int) $totals->cnt;
 		}
 
-		return array('errors' => $errors, 'inserted' => $inserted, 'total_lines' => $total_lines);
+		return array(
+			'errors' => $errors,
+			'inserted' => $inserted,
+			'total_lines' => $parsed['total_lines'],
+			'duplicates' => $valid_rows - $inserted, // rows already recorded for this draw (bond numbers are unique per draw)
+			'created_locations' => $created_locations,
+			'published' => $published,
+			'draw_total' => $draw_total,
+		);
 	}
 
 
