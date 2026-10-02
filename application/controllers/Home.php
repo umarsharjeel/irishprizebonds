@@ -25,8 +25,7 @@ class Home extends CI_Controller {
 
 		$data['top_tiers'] = array();
 		if ($data['last_draw'] && $data['last_draw']->published) {
-			$data['top_tiers'] = $this->db->select('prize_value, prize_count')->from('draw_prize_tiers')
-				->where('draw_id', $data['last_draw']->id)->order_by('prize_value', 'desc')->limit(4)->get()->result();
+			$data['top_tiers'] = get_draw_tiers($this->db, $data['last_draw']->id, 4, true);
 		}
 
 		$data['title'] = 'Irish Prize Bonds Checker - Results Tracker and Number Search';

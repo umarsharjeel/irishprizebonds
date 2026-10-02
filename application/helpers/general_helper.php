@@ -22,6 +22,41 @@ function db_insert_batch_ignore($db, $table, $batch)
 }
 
 /**
+ * Prize tiers (value + number of prizes) for a draw, highest-ranked first.
+ *
+ * Falls back to grouping the draw's winners by prize value when draw_prize_tiers
+ * has no rows for it — a draw imported through the winners CSV importer has
+ * winners but no tier rows, and without this fallback every page that reads
+ * tiers straight from the table shows an empty table for it.
+ *
+ * $by_value = true orders by prize value only (the home page / results hub
+ * cards); false honours the admin-editable sort_order first (draw pages).
+ */
+function get_draw_tiers($db, $draw_id, $limit = null, $by_value = false)
+{
+  $db->select('prize_value, prize_count')->from('draw_prize_tiers')->where('draw_id', $draw_id);
+  if (!$by_value) {
+    $db->order_by('sort_order');
+  }
+  $db->order_by('prize_value', 'desc');
+  if ($limit) {
+    $db->limit($limit);
+  }
+  $tiers = $db->get()->result();
+
+  if (empty($tiers)) {
+    $db->select('prize_value, COUNT(*) as prize_count', false)->from('draw_winners')
+      ->where('draw_id', $draw_id)->group_by('prize_value')->order_by('prize_value', 'desc');
+    if ($limit) {
+      $db->limit($limit);
+    }
+    $tiers = $db->get()->result();
+  }
+
+  return $tiers;
+}
+
+/**
  * Normalises one cell of a winners import: collapses whitespace (incl. NBSP)
  * and drops the mobile-only label statesavings.ie's results table repeats
  * inside every cell ("Winning Prize Bond ZF816367") — a copy/scrape of the

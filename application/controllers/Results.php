@@ -38,8 +38,7 @@ class Results extends CI_Controller {
 		}
 
 		$data['latest'] = $latest;
-		$data['top_tiers'] = $this->db->select('prize_value, prize_count')->from('draw_prize_tiers')
-			->where('draw_id', $latest->id)->order_by('prize_value', 'desc')->limit(5)->get()->result();
+		$data['top_tiers'] = get_draw_tiers($this->db, $latest->id, 5, true);
 		$data['recent'] = $this->db->select('draw_date, is_jackpot, total_prize_fund, total_prizes_count')
 			->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->limit(13)->get()->result();
 
@@ -129,12 +128,7 @@ class Results extends CI_Controller {
 			return;
 		}
 
-		$tiers = $this->db->select('prize_value, prize_count')->from('draw_prize_tiers')
-			->where('draw_id', $draw->id)->order_by('sort_order')->order_by('prize_value', 'desc')->get()->result();
-		if (empty($tiers)) {
-			$tiers = $this->db->select('prize_value, COUNT(*) as prize_count')->from('draw_winners')
-				->where('draw_id', $draw->id)->group_by('prize_value')->order_by('prize_value', 'desc')->get()->result();
-		}
+		$tiers = get_draw_tiers($this->db, $draw->id);
 
 		$data['summary'] = $this->_build_draw_summary($draw, $tiers);
 		$data['analysis'] = $this->_build_draw_analysis($draw, $tiers);
@@ -223,9 +217,7 @@ class Results extends CI_Controller {
 
 		$ctx['last_same_type_tiers'] = array();
 		if ($ctx['last_same_type']) {
-			$ctx['last_same_type_tiers'] = $this->db->select('prize_value, prize_count')->from('draw_prize_tiers')
-				->where('draw_id', $ctx['last_same_type']->id)
-				->order_by('sort_order')->order_by('prize_value', 'desc')->limit(6)->get()->result();
+			$ctx['last_same_type_tiers'] = get_draw_tiers($this->db, $ctx['last_same_type']->id, 6);
 		}
 
 		$this->db->select(

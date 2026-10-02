@@ -63,7 +63,7 @@ $n_type = ($type_stats && $type_stats->n) ? (int) $type_stats->n : 0;
 				The most recent <?php echo $type_label; ?> draw we have results for was
 				<a href="<?php echo base_url(); ?>results/view/<?php echo $last_same_type->draw_date; ?>/"><?php echo date('j F Y', strtotime($last_same_type->draw_date)); ?></a>:
 				<?php echo number_format($last_same_type->total_prizes_count); ?> prizes worth &euro;<?php echo number_format($last_same_type->total_prize_fund); ?> in total.
-				Its largest prize tiers were:
+				<?php if (!empty($last_same_type_tiers)): ?>Its largest prize tiers were:<?php endif; ?>
 			</p>
 			<?php if (!empty($last_same_type_tiers)): ?>
 			<div class="table-wrap">
