@@ -4,8 +4,21 @@
 	<div class="container">
 		<h1>Irish Prize Bonds Checker</h1>
 		<p class="lead">Check your Prize Bond numbers against every draw, track the latest results as they are published, and browse the full draw history — free, fast, and mobile-friendly.</p>
+		<?php // POSTs to the full checker, which shows the result. Not GET: bond numbers must not end up in URLs (analytics records page URLs). ?>
+		<form method="post" action="<?php echo base_url(); ?>search/checker/" class="hero-check">
+			<label for="hero-bond" class="hero-check-label">Check a bond number</label>
+			<div class="hero-check-row">
+				<input type="text" id="hero-bond" name="first_0" placeholder="e.g. AHU176759" maxlength="20" required
+				       autocomplete="off" autocapitalize="characters" spellcheck="false">
+				<input type="hidden" name="do_check" value="1">
+				<button type="submit" class="btn btn-primary">Check</button>
+			</div>
+			<p class="hero-check-help">
+				Matched against every published draw, not just the latest. Have several numbers or a range?
+				<a href="<?php echo base_url(); ?>search/checker/">Use the full checker</a>.
+			</p>
+		</form>
 		<div class="actions">
-			<a href="<?php echo base_url(); ?>search/checker/" class="btn btn-primary">Check My Numbers</a>
 			<a href="<?php echo base_url(); ?>results/" class="btn btn-secondary">Latest Results</a>
 			<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-secondary">Draw Archive</a>
 		</div>

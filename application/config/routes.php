@@ -66,6 +66,7 @@ $route['cron/(:any)'] = 'cron/$1';
 $route['stats/winners'] = 'stats/winners';
 $route['stats/counties'] = 'stats/counties';
 $route['stats/odds'] = 'stats/odds';
+$route['stats/prize-fund'] = 'stats/prize_fund';
 $route['how-it-works'] = 'content/how_it_works';
 $route['faq'] = 'content/faq';
 $route['about'] = 'content/about';

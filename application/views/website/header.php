@@ -72,6 +72,7 @@
 					<div class="nav-dropdown-menu">
 						<a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a>
 						<a href="<?php echo base_url(); ?>stats/counties/">County Stats</a>
+						<a href="<?php echo base_url(); ?>stats/prize-fund/">Prize Fund Trends</a>
 						<a href="<?php echo base_url(); ?>stats/odds/">Odds Calculator</a>
 					</div>
 				</div>

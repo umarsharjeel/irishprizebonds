@@ -49,8 +49,10 @@
 			</table>
 		</div>
 		<?php endif; ?>
-		<a href="<?php echo base_url(); ?>results/view/<?php echo $latest->draw_date; ?>/" class="btn btn-primary">See full winners list</a>
-		<a href="<?php echo base_url(); ?>search/checker/" class="btn btn-default">Check my numbers</a>
+		<div class="btn-row">
+			<a href="<?php echo base_url(); ?>results/view/<?php echo $latest->draw_date; ?>/" class="btn btn-primary">See full winners list</a>
+			<a href="<?php echo base_url(); ?>search/checker/" class="btn btn-default">Check my numbers</a>
+		</div>
 	</div>
 
 	<h2>Recent Draws</h2>

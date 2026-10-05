@@ -17,6 +17,7 @@
 					<ul>
 						<li><a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a></li>
 						<li><a href="<?php echo base_url(); ?>stats/counties/">County Stats</a></li>
+						<li><a href="<?php echo base_url(); ?>stats/prize-fund/">Prize Fund Trends</a></li>
 						<li><a href="<?php echo base_url(); ?>stats/odds/">Odds Calculator</a></li>
 					</ul>
 				</div>

@@ -83,3 +83,15 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+/*
+|--------------------------------------------------------------------------
+| Prize structure change
+|--------------------------------------------------------------------------
+|
+| The prize fund and tiers were increased from this date (top regular prize
+| EUR 50k -> EUR 100k, base prize EUR 75 -> EUR 100; see how_it_works.php).
+| Prize totals from either side of it aren't like-for-like, so every
+| cross-draw comparison (draw analysis, trend pages) must stay on one side.
+*/
+defined('PRIZE_CHANGE_DATE')   OR define('PRIZE_CHANGE_DATE', '2026-09-01');

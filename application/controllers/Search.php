@@ -22,14 +22,18 @@ class Search extends CI_Controller {
 		if ($this->input->post('do_check')) {
 			$clean = array();
 			for ($i = 0; $i < 5; $i++) {
-				$first = strtoupper(trim((string) $this->input->post('first_' . $i)));
-				$last = strtoupper(trim((string) $this->input->post('last_' . $i)));
+				$first = normalize_bond_input($this->input->post('first_' . $i));
+				$last = normalize_bond_input($this->input->post('last_' . $i));
 				$data['slots'][$i] = array('first' => $first, 'last' => $last);
 
 				if ($first === '') {
 					continue;
 				}
 				if ($last === '') {
+					if (!is_searchable_bond_number($first)) {
+						$data['errors'][] = 'Row ' . ($i + 1) . ': "' . $first . '" is not a recognised Prize Bond number. Bond numbers are letters and digits only, usually 2-3 letters then 6 digits (for example AHU176759); some older bonds are digits only.';
+						continue;
+					}
 					$clean[] = $first;
 					continue;
 				}
@@ -57,7 +61,9 @@ class Search extends CI_Controller {
 					->order_by('draws.draw_date', 'desc')
 					->get()->result();
 			} else {
-				$data['results'] = array();
+				// Nothing was searched. If that was because of an input error, show just the
+				// error rather than also claiming "No prizes found" for numbers never checked.
+				$data['results'] = empty($data['errors']) ? array() : null;
 			}
 		}
 

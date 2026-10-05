@@ -176,6 +176,27 @@ function parse_winners_import($raw, $expected_draw_date)
 define('BOND_NUMBER_PATTERN', '/^([A-Z]{2,3})(\d{6})$/');
 
 /**
+ * Turns a bond number as a person types it ("ahu 176-759") into the form held in
+ * the results ("AHU176759"): upper-case, with spaces (including non-breaking),
+ * hyphens, dots and underscores removed.
+ */
+function normalize_bond_input($value)
+{
+  return strtoupper(preg_replace('/(?:\s|\xC2\xA0|[\-_.])+/', '', (string) $value));
+}
+
+/**
+ * Whether a normalised value is plausibly a bond number worth searching for. Deliberately
+ * looser than BOND_NUMBER_PATTERN (2-3 letters then 6 digits): the results also hold older
+ * bonds with a one-letter prefix or digits only, and the winners importer accepts the same
+ * 4-10 letters-and-digits shape.
+ */
+function is_searchable_bond_number($value)
+{
+  return (bool) preg_match('/^[A-Z0-9]{4,10}$/', $value);
+}
+
+/**
  * Expands an inclusive "first, last" Prize Bond range into every individual
  * number in it. $last may be a full bond number (must share $first's letter
  * prefix) or just the trailing digits (inherits $first's prefix) — e.g.

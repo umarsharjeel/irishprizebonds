@@ -147,7 +147,10 @@ $n_type = ($type_stats && $type_stats->n) ? (int) $type_stats->n : 0;
 			<li>See all draw dates on the <a href="<?php echo base_url(); ?>schedule/">draw schedule</a>.</li>
 		</ul>
 
-		<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-default">&laquo; Back to Draw Archive</a>
+		<div class="btn-row">
+			<a href="<?php echo base_url(); ?>results/" class="btn btn-primary">See the latest results</a>
+			<a href="<?php echo base_url(); ?>results/archive/" class="btn btn-default">Browse the draw archive</a>
+		</div>
 	</div>
 </div>
 

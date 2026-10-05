@@ -5,12 +5,6 @@ class Results extends CI_Controller {
 
 	private $per_page = 20;
 
-	// Prize fund and tiers were increased from this date (top regular prize
-	// €50k -> €100k, base prize €75 -> €100; see how_it_works.php). Prize totals
-	// from either side of it aren't like-for-like, so any comparison between
-	// draws is scoped to the same side via _where_same_era().
-	const PRIZE_CHANGE_DATE = '2026-09-01';
-
 	function __construct()
 	{
 		parent::__construct();
@@ -212,7 +206,7 @@ class Results extends CI_Controller {
 			->where('draw_date <', $draw->draw_date);
 		$this->_where_same_era($draw->draw_date);
 		$ctx['last_same_type'] = $this->db->order_by('draw_date', 'desc')->limit(1)->get()->row();
-		$ctx['new_era'] = $draw->draw_date >= self::PRIZE_CHANGE_DATE;
+		$ctx['new_era'] = $draw->draw_date >= PRIZE_CHANGE_DATE;
 		$ctx['era_label'] = $ctx['new_era'] ? 'since the 1 September 2026 prize increase' : 'before the 1 September 2026 prize increase';
 
 		$ctx['last_same_type_tiers'] = array();
@@ -250,10 +244,10 @@ class Results extends CI_Controller {
 	 */
 	private function _where_same_era($date)
 	{
-		if ($date >= self::PRIZE_CHANGE_DATE) {
-			$this->db->where('draw_date >=', self::PRIZE_CHANGE_DATE);
+		if ($date >= PRIZE_CHANGE_DATE) {
+			$this->db->where('draw_date >=', PRIZE_CHANGE_DATE);
 		} else {
-			$this->db->where('draw_date <', self::PRIZE_CHANGE_DATE);
+			$this->db->where('draw_date <', PRIZE_CHANGE_DATE);
 		}
 	}
 
@@ -266,7 +260,7 @@ class Results extends CI_Controller {
 	private function _build_draw_analysis($draw, $tiers)
 	{
 		$is_jackpot = (int) $draw->is_jackpot;
-		$new_era = $draw->draw_date >= self::PRIZE_CHANGE_DATE;
+		$new_era = $draw->draw_date >= PRIZE_CHANGE_DATE;
 		$a = array(
 			'type_label' => $is_jackpot ? 'jackpot' : 'regular',
 			'new_era' => $new_era,
@@ -284,7 +278,7 @@ class Results extends CI_Controller {
 		$a['first_since_change'] = false;
 		if ($new_era) {
 			$earlier = $this->db->from('draws')->where('published', 1)
-				->where('draw_date >=', self::PRIZE_CHANGE_DATE)->where('draw_date <', $draw->draw_date)
+				->where('draw_date >=', PRIZE_CHANGE_DATE)->where('draw_date <', $draw->draw_date)
 				->count_all_results();
 			$a['first_since_change'] = ($earlier === 0);
 		}
@@ -297,7 +291,7 @@ class Results extends CI_Controller {
 			        SUM(total_prizes_count > ?) AS prizes_above, SUM(total_prizes_count = ?) AS prizes_equal
 			 FROM draws WHERE published = 1 AND is_jackpot = ? AND total_prize_fund > 0 AND draw_date {$op} ?",
 			array($draw->total_prize_fund, $draw->total_prize_fund, $draw->total_prizes_count, $draw->total_prizes_count,
-			      $is_jackpot, self::PRIZE_CHANGE_DATE)
+			      $is_jackpot, PRIZE_CHANGE_DATE)
 		)->row();
 		$a['rank'] = null;
 		if ($rank && (int) $rank->m >= 3) {

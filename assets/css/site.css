@@ -69,9 +69,10 @@ h3 { font-size: 1.2rem; }
 p { margin: 0 0 14px; }
 a { color: var(--color-primary-dark); text-decoration: none; }
 a:hover { text-decoration: underline; }
-/* In-content links must be distinguishable by more than colour (WCAG 1.4.1) */
-main p a,
-.content-page-body a,
+/* In-content links must be distinguishable by more than colour (WCAG 1.4.1).
+   Buttons are excluded: their shape already sets them apart, and underlined labels look wrong. */
+main p a:not(.btn),
+.content-page-body a:not(.btn),
 .faq-item a,
 .site-footer .fine-print a { text-decoration: underline; }
 
@@ -216,6 +217,15 @@ main p a,
 .hero .lead { color: rgba(255,255,255,0.9); font-size: 1.1rem; max-width: 620px; }
 .hero .actions { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
 
+/* Quick bond-number check in the hero. 16px input text stops iOS zooming on focus. */
+.hero-check { margin-top: 22px; max-width: 520px; }
+.hero-check-label { display: block; font-weight: 700; margin-bottom: 6px; }
+.hero-check-row { display: flex; gap: 10px; }
+.hero-check-row input[type="text"] { flex: 1 1 auto; min-width: 0; font-size: 1rem; padding: 11px 14px; }
+.hero-check-row .btn { flex: 0 0 auto; }
+.hero-check-help { margin: 8px 0 0; font-size: 0.9rem; color: rgba(255,255,255,0.85); }
+.hero-check-help a { color: #fff; text-decoration: underline; }
+
 @media (min-width: 640px) {
 	.hero h1 { font-size: 2.4rem; }
 }
@@ -241,6 +251,13 @@ main p a,
 .btn-default:hover { background: var(--color-primary-light); }
 .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
 .btn-block { display: block; width: 100%; }
+
+/* Side-by-side buttons that wrap cleanly: a plain pair of inline-block .btn links
+   has no vertical gap once the second one drops to its own line on a phone. */
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+@media (max-width: 480px) {
+	.btn-row .btn { flex: 1 1 100%; }
+}
 
 /* ---------- Cards / surfaces ---------- */
 

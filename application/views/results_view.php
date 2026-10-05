@@ -78,7 +78,8 @@ $eur = function ($n) { return '&euro;' . number_format(abs($n)); };
 		Worked out by us from this draw's published results and the other draws we track, not copied from the official site.
 		Comparisons only use <?php echo $an['type_label']; ?> draws <?php echo $an['era_label']; ?>, because the prize fund and tiers
 		changed on 1 September 2026 and totals from either side of that date aren't like-for-like.
-		See <a href="<?php echo base_url(); ?>how-we-source-our-data/">how we source our data</a>.
+		See <a href="<?php echo base_url(); ?>how-we-source-our-data/">how we source our data</a>, or the
+		<a href="<?php echo base_url(); ?>stats/prize-fund/">monthly prize fund trends</a> for the bigger picture.
 	</p>
 
 	<?php if ($an['comparator']): ?>
