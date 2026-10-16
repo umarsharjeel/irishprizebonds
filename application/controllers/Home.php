@@ -28,8 +28,20 @@ class Home extends CI_Controller {
 			$data['top_tiers'] = get_draw_tiers($this->db, $data['last_draw']->id, 4, true);
 		}
 
-		$data['title'] = 'Irish Prize Bonds Checker - Results Tracker and Number Search';
-		$data['description'] = 'Free Irish Prize Bonds checker and results tracker. Check your Prize Bond numbers against every draw, see the latest results and browse the full draw archive.';
+		// The home page is what ranks in Google for "prize bonds results" / "checker"
+		// (Search Console, 2026-08-30..10-13: ~58% of all impressions, vs 8% for
+		// /results/), so its title/description carry the head terms and name the latest
+		// published draw. Falls back to the static text if nothing is published yet.
+		$latest_published = $this->db->select('draw_date')->from('draws')
+			->where('published', 1)->order_by('draw_date', 'desc')->limit(1)->get()->row();
+
+		if ($latest_published) {
+			$data['title'] = 'Irish Prize Bonds Results and Checker - ' . date('j M Y', strtotime($latest_published->draw_date)) . ' Draw';
+			$data['description'] = 'Irish Prize Bond results for the ' . date('j F Y', strtotime($latest_published->draw_date)) . ' draw, usually posted within hours. Free checker and tracker: check your numbers against every draw.';
+		} else {
+			$data['title'] = 'Irish Prize Bonds Checker - Results Tracker and Number Search';
+			$data['description'] = 'Free Irish Prize Bonds checker and results tracker. Check your Prize Bond numbers against every draw, see the latest results and browse the full draw archive.';
+		}
 		$this->load->view('home', $data);
 	}
 
