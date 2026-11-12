@@ -11,7 +11,7 @@
 
 		<h2>Prize Bonds never expire</h2>
 		<p>
-			A Prize Bond stays valid, and stays entered in every weekly draw, for as long as it's held &mdash; there's no expiry date and no cut-off after which an old bond stops counting. The same is true of prizes: an unclaimed win doesn't lapse either. This matters a lot for old certificates, because it means a bond bought decades ago, or found while sorting through a relative's paperwork, can still be actively winning money right now. You can check any bond number &mdash; however old &mdash; against every draw we hold using our <a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a> tool.
+			A Prize Bond stays valid, and stays entered in every weekly draw, for as long as it's held &mdash; there's no expiry date and no cut-off after which an old bond stops counting. The same is true of prizes: an unclaimed win doesn't lapse either. This matters a lot for old certificates, because it means a bond bought decades ago, or found while sorting through a relative's paperwork, can still be actively winning money right now. You can check any bond number against the draws we hold using our <a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a> tool<?php if (!empty($coverage) && (int) $coverage->draws > 0): ?> &mdash; our results start on <?php echo date('j F Y', strtotime($coverage->first_date)); ?>, so a prize won in an earlier draw won't show here<?php endif; ?>.
 		</p>
 
 		<h2>What happens to Prize Bonds when the holder dies</h2>

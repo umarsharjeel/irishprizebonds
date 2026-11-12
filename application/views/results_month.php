@@ -49,7 +49,7 @@
 	</div>
 
 	<p class="text-muted">
-		Looking for a different month? Browse the full <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>,
+		Looking for a different month? Browse the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>,
 		or check your own numbers with our <a href="<?php echo base_url(); ?>search/checker/">Prize Bond Checker</a>.
 	</p>
 </div>

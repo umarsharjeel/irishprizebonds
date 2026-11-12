@@ -75,7 +75,7 @@
 			Even over that relatively short window, real money is clearly going out every single week, spread across
 			thousands of individual bond numbers &mdash; not just the headline &euro;100,000 or &euro;500,000 jackpot
 			prizes. These figures will keep growing as our archive does; check back for an ever-longer track record.
-			Browse the full <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> or
+			Browse the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> or
 			<a href="<?php echo base_url(); ?>stats/winners/">Big Winners</a> page to see it draw by draw.
 		</p>
 		<?php endif; ?>

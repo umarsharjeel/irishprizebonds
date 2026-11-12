@@ -52,7 +52,7 @@
 		</p>
 
 		<p>
-			See the full <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for past results, or read
+			See the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a> for the past results we hold, or read
 			<a href="<?php echo base_url(); ?>how-it-works/">How Prize Bonds Work</a> for the complete picture.
 		</p>
 	</div>
