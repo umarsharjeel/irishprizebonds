@@ -158,7 +158,7 @@ class Content extends CI_Controller {
 	public function buying_and_cashing_in()
 	{
 		$data['title'] = 'How to Buy and Cash In Irish Prize Bonds | Irish Prize Bonds';
-		$data['description'] = 'Step-by-step: how to buy Irish Prize Bonds online, by post office, or by phone, how first-time registration works, the 3-month rule before cashing in, and how to request repayment.';
+		$data['description'] = 'How to buy Irish Prize Bonds online, at a post office or by phone, how first-time registration works, the 3-month rule, and how to request repayment.';
 		$this->load->view('buying_and_cashing_in', $data);
 	}
 
@@ -275,7 +275,7 @@ class Content extends CI_Controller {
 		$data['winner_count'] = $this->db->select('COUNT(DISTINCT bond_number) as c')->from('draw_winners')->get()->row()->c;
 
 		$data['title'] = 'Are Irish Prize Bonds Worth It? | Irish Prize Bonds';
-		$data['description'] = 'A balanced, data-informed look at whether Irish Prize Bonds are worth it compared to an ordinary tax-free deposit account, using our own tracked draw results.';
+		$data['description'] = 'A balanced, data-informed look at whether Irish Prize Bonds are worth it compared with a tax-free deposit account, using our tracked draw results.';
 		$this->load->view('worth_it', $data);
 	}
 

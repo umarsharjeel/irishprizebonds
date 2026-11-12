@@ -11,7 +11,7 @@ class Search extends CI_Controller {
 	public function checker()
 	{
 		$data['title'] = 'Check Prize Bond Numbers Online - Free Checker | Irish Prize Bonds';
-		$data['description'] = 'Check your Irish Prize Bond numbers online for free. Enter up to five numbers — or whole ranges from a certificate — against every draw result we hold, not just the latest.';
+		$data['description'] = 'Check your Irish Prize Bond numbers online for free. Enter up to five numbers, or whole ranges, against every draw result we hold, not just the latest.';
 		$data['coverage'] = get_archive_coverage($this->db);
 		$data['slots'] = array();
 		for ($i = 0; $i < 5; $i++) {
