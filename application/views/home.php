@@ -3,7 +3,7 @@
 <div class="hero">
 	<div class="container">
 		<h1>Irish Prize Bonds Checker</h1>
-		<p class="lead">Check your Prize Bond numbers against every draw, track the latest results as they are published, and browse the full draw history — free, fast, and mobile-friendly.</p>
+		<p class="lead">Check your Prize Bond numbers against the draws we hold, track the latest results as they are published, and browse the draw archive — free, fast, and mobile-friendly.</p>
 		<?php // POSTs to the full checker, which shows the result. Not GET: bond numbers must not end up in URLs (analytics records page URLs). ?>
 		<form method="post" action="<?php echo base_url(); ?>search/checker/" class="hero-check">
 			<label for="hero-bond" class="hero-check-label">Check a bond number</label>
@@ -14,7 +14,7 @@
 				<button type="submit" class="btn btn-primary">Check</button>
 			</div>
 			<p class="hero-check-help">
-				Matched against every published draw, not just the latest. Have several numbers or a range?
+				Matched against every draw we hold, not just the latest. Have several numbers or a range?
 				<a href="<?php echo base_url(); ?>search/checker/">Use the full checker</a>.
 			</p>
 		</form>
@@ -95,8 +95,8 @@
 		Irish Prize Bonds is a free, independent checker and results tracker for Ireland's Prize Bond draws. Every
 		bond you hold has its own unique number and its own chance to win in the <a href="<?php echo base_url(); ?>schedule/">weekly draw</a>,
 		with an extra &euro;500,000 jackpot on the last draw of each month. Rather than making you dig through one
-		draw at a time, we track results across every draw we cover, so you can search your numbers in one place,
-		browse the <a href="<?php echo base_url(); ?>results/archive/">full draw archive</a>, and see statistics —
+		draw at a time, we track results across all the draws we hold, so you can search your numbers in one place,
+		browse the <a href="<?php echo base_url(); ?>results/archive/">draw archive</a>, and see statistics —
 		like which <a href="<?php echo base_url(); ?>stats/counties/">county wins most often</a> — that a single-draw
 		lookup can't show you.
 	</p>

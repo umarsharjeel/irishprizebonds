@@ -37,10 +37,10 @@ class Home extends CI_Controller {
 
 		if ($latest_published) {
 			$data['title'] = 'Irish Prize Bonds Results and Checker - ' . date('j M Y', strtotime($latest_published->draw_date)) . ' Draw';
-			$data['description'] = 'Irish Prize Bond results for the ' . date('j F Y', strtotime($latest_published->draw_date)) . ' draw, usually posted within hours. Free checker and tracker: check your numbers against every draw.';
+			$data['description'] = 'Irish Prize Bond results for the ' . date('j F Y', strtotime($latest_published->draw_date)) . ' draw, usually posted within hours. Free checker and tracker: check your numbers against every draw we hold.';
 		} else {
 			$data['title'] = 'Irish Prize Bonds Checker - Results Tracker and Number Search';
-			$data['description'] = 'Free Irish Prize Bonds checker and results tracker. Check your Prize Bond numbers against every draw, see the latest results and browse the full draw archive.';
+			$data['description'] = 'Free Irish Prize Bonds checker and results tracker. Check your Prize Bond numbers against the draws we hold, see the latest results and browse the draw archive.';
 		}
 		$this->load->view('home', $data);
 	}

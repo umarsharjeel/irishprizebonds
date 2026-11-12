@@ -57,6 +57,22 @@ function get_draw_tiers($db, $draw_id, $limit = null, $by_value = false)
 }
 
 /**
+ * What the archive actually covers: number of published draws and the first and last
+ * draw dates. Used wherever the site describes its coverage, so those claims can never
+ * drift from the data (and extend by themselves if earlier draws are added later).
+ * Cached per request.
+ */
+function get_archive_coverage($db)
+{
+  static $cache = null;
+  if ($cache === null) {
+    $cache = $db->select('COUNT(*) AS draws, MIN(draw_date) AS first_date, MAX(draw_date) AS last_date', false)
+      ->from('draws')->where('published', 1)->get()->row();
+  }
+  return $cache;
+}
+
+/**
  * Normalises one cell of a winners import: collapses whitespace (incl. NBSP)
  * and drops the mobile-only label statesavings.ie's results table repeats
  * inside every cell ("Winning Prize Bond ZF816367") — a copy/scrape of the

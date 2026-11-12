@@ -142,7 +142,7 @@ $n_type = ($type_stats && $type_stats->n) ? (int) $type_stats->n : 0;
 
 		<h2>While you wait</h2>
 		<ul>
-			<li>Check your bond numbers against every draw we have published with the <a href="<?php echo base_url(); ?>search/checker/">number checker</a>, or paste a long list into <a href="<?php echo base_url(); ?>search/power/">Power Search</a>.</li>
+			<li>Check your bond numbers against every draw we hold with the <a href="<?php echo base_url(); ?>search/checker/">number checker</a>, or paste a long list into <a href="<?php echo base_url(); ?>search/power/">Power Search</a>.</li>
 			<li>Wondering what a win would involve? <a href="<?php echo base_url(); ?>how-to-buy-and-cash-in/">How to buy and cash in</a> covers claiming and repayment, and <a href="<?php echo base_url(); ?>stats/odds/">the odds calculator</a> estimates your chances.</li>
 			<li>See all draw dates on the <a href="<?php echo base_url(); ?>schedule/">draw schedule</a>.</li>
 		</ul>

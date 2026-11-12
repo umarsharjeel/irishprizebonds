@@ -12,9 +12,9 @@
 </script>
 
 <div class="container">
-	<h1>Irish Prize Bond Results</h1>
+	<h1>Irish Prize Bond Results and Winners List</h1>
 	<p class="lead-paragraph">
-		The latest Irish Prize Bond draw results, updated after every weekly draw. Prize Bond draws are held
+		The latest Irish Prize Bond draw results and winners list, updated after every weekly draw. Prize Bond draws are held
 		every Friday, with an extra &euro;500,000 jackpot on the last draw of each month. Use the
 		<a href="<?php echo base_url(); ?>search/checker/">number checker</a> to see if any of your bonds have won
 		across every draw we track, not just the most recent one.
@@ -54,6 +54,33 @@
 			<a href="<?php echo base_url(); ?>search/checker/" class="btn btn-default">Check my numbers</a>
 		</div>
 	</div>
+
+	<?php if (!empty($winners)): ?>
+	<h2>Winners List &mdash; <?php echo date('j F Y', strtotime($latest->draw_date)); ?> Draw</h2>
+	<p>
+		The <?php echo count($winners); ?> prizes of &euro;1,000 and over in this draw, with the winning bond number and location.
+		<?php $smaller = (int) $latest->total_prizes_count - count($winners); ?>
+		<?php if ($smaller > 0): ?>
+			The other <?php echo number_format($smaller); ?> prizes are smaller and are in the
+			<a href="<?php echo base_url(); ?>results/view/<?php echo $latest->draw_date; ?>/">full winners list</a>,
+			where you can search by bond number.
+		<?php endif; ?>
+	</p>
+	<div class="table-wrap">
+		<table class="data-table data-table-compact">
+			<thead><tr><th>Prize</th><th>Winning Bond</th><th>Location</th></tr></thead>
+			<tbody>
+				<?php foreach ($winners as $w): ?>
+					<tr>
+						<td>&euro;<?php echo number_format($w->prize_value); ?></td>
+						<td><?php echo htmlspecialchars($w->bond_number); ?></td>
+						<td><?php echo $w->location ? htmlspecialchars($w->location) : '&mdash;'; ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+	<?php endif; ?>
 
 	<h2>Recent Draws</h2>
 	<div class="table-wrap">

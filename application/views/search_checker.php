@@ -9,7 +9,7 @@
 	'applicationCategory' => 'FinanceApplication',
 	'operatingSystem' => 'Any',
 	'offers' => array('@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'EUR'),
-	'description' => 'Free tool to check Irish Prize Bond numbers against every published draw result.',
+	'description' => 'Free tool to check Irish Prize Bond numbers against the draw results held on this site.',
 ), JSON_UNESCAPED_SLASHES); ?>
 </script>
 
@@ -26,6 +26,14 @@
 		Number</strong> next to any row and we'll check the whole range for you — no need to type out every number
 		individually.
 	</p>
+
+	<?php if ($coverage && (int) $coverage->draws > 0): ?>
+		<div class="alert alert-info">
+			<strong>What this checks:</strong> the <?php echo number_format($coverage->draws); ?> draws we hold, from
+			<?php echo date('j F Y', strtotime($coverage->first_date)); ?> to <?php echo date('j F Y', strtotime($coverage->last_date)); ?>.
+			A prize won in an earlier draw won't appear here &mdash; for earlier draws, check with <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Ireland State Savings (statesavings.ie)</a>.
+		</div>
+	<?php endif; ?>
 
 	<div class="card">
 		<form method="post">
@@ -54,7 +62,7 @@
 
 	<?php if ($results !== null): ?>
 		<?php if (empty($results)): ?>
-			<div class="alert alert-info">No prizes found for the numbers entered.</div>
+			<div class="alert alert-info">No prizes found for the numbers entered in the draws we hold<?php if ($coverage && (int) $coverage->draws > 0): ?> (<?php echo date('j F Y', strtotime($coverage->first_date)); ?> to <?php echo date('j F Y', strtotime($coverage->last_date)); ?>)<?php endif; ?>. A prize won in an earlier draw wouldn't appear here &mdash; for earlier draws, check with <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Ireland State Savings (statesavings.ie)</a>.</div>
 		<?php else: ?>
 			<div class="alert alert-success">Congratulations &mdash; <?php echo count($results); ?> prize(s) found!</div>
 			<div class="table-wrap">
@@ -79,15 +87,15 @@
 
 	<p class="text-muted">
 		Checking more than five numbers or ranges? Use <a href="<?php echo base_url(); ?>search/power/">Power Search</a> to paste a longer list,
-		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
+		or browse the draws we hold in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
 	</p>
 
 	<h2>How to check your Prize Bonds</h2>
 	<ol>
 		<li>Find your bond numbers on your Prize Bond certificate or in your State Savings online account &mdash; each is a 2&ndash;3 letter prefix followed by six digits (e.g. <code>AHU176759</code>).</li>
 		<li>Enter each number in a row above. If a certificate covers a block of consecutive bonds, put the first number in the left box and the last in the right box to check the whole range at once.</li>
-		<li>Select <strong>Check Numbers</strong>. Every number is matched against all published draw results we hold, going back through the full <a href="<?php echo base_url(); ?>results/archive/">archive</a> &mdash; not just the most recent draw.</li>
-		<li>Any prize is shown with its value, the draw date and the winning location. Unclaimed Prize Bond prizes do not expire, so it is worth checking older draws too.</li>
+		<li>Select <strong>Check Numbers</strong>. Every number is matched against the draw results we hold (the date range is shown above), not just the most recent draw &mdash; see the <a href="<?php echo base_url(); ?>results/archive/">archive</a>.</li>
+		<li>Any prize is shown with its value, the draw date and the winning location. Unclaimed Prize Bond prizes do not expire, so for draws before our archive begins, check with Ireland State Savings.</li>
 	</ol>
 	<p class="text-muted">
 		This is an independent checker. To claim a prize or update your bank details, use the official

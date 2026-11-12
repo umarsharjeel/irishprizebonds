@@ -275,7 +275,7 @@ $eur = function ($n) { return '&euro;' . number_format(abs($n)); };
 	<?php endif; ?>
 
 	<p class="text-muted">
-		Don't see your numbers here? Check them across every draw with our
+		Don't see your numbers here? Check them across every draw we hold with our
 		<a href="<?php echo base_url(); ?>search/checker/">Prize Bond Checker</a> or
 		<a href="<?php echo base_url(); ?>search/power/">Power Search</a>.
 	</p>

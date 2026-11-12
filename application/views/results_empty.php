@@ -12,7 +12,7 @@
 		<h2>What you'll find here once results are live</h2>
 		<ul>
 			<li>The result of every weekly draw, with the full prize breakdown and winning bond numbers by location.</li>
-			<li>A <a href="<?php echo base_url(); ?>search/checker/">number checker</a> and <a href="<?php echo base_url(); ?>search/power/">Power Search</a> for testing your own bonds against every published draw.</li>
+			<li>A <a href="<?php echo base_url(); ?>search/checker/">number checker</a> and <a href="<?php echo base_url(); ?>search/power/">Power Search</a> for testing your own bonds against the draws we hold.</li>
 			<li>Statistics on <a href="<?php echo base_url(); ?>stats/winners/">big winners</a>, <a href="<?php echo base_url(); ?>stats/counties/">winning counties</a> and <a href="<?php echo base_url(); ?>stats/odds/">your odds</a>.</li>
 		</ul>
 

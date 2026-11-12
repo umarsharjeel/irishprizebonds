@@ -14,6 +14,14 @@
 		consecutively-numbered bonds is one line, not forty.
 	</p>
 
+	<?php if ($coverage && (int) $coverage->draws > 0): ?>
+		<div class="alert alert-info">
+			<strong>What this checks:</strong> the <?php echo number_format($coverage->draws); ?> draws we hold, from
+			<?php echo date('j F Y', strtotime($coverage->first_date)); ?> to <?php echo date('j F Y', strtotime($coverage->last_date)); ?>.
+			A prize won in an earlier draw won't appear here &mdash; for earlier draws, check with <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Ireland State Savings (statesavings.ie)</a>.
+		</div>
+	<?php endif; ?>
+
 	<div class="card">
 		<form method="post">
 			<div class="form-row">
@@ -32,7 +40,7 @@
 	<?php if ($results !== null): ?>
 		<p class="text-muted"><?php echo number_format($searched_count); ?> number(s) searched.</p>
 		<?php if (empty($results)): ?>
-			<div class="alert alert-info">No prizes found for the numbers entered.</div>
+			<div class="alert alert-info">No prizes found for the numbers entered in the draws we hold<?php if ($coverage && (int) $coverage->draws > 0): ?> (<?php echo date('j F Y', strtotime($coverage->first_date)); ?> to <?php echo date('j F Y', strtotime($coverage->last_date)); ?>)<?php endif; ?>. A prize won in an earlier draw wouldn't appear here &mdash; for earlier draws, check with <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">Ireland State Savings (statesavings.ie)</a>.</div>
 		<?php else: ?>
 			<div class="alert alert-success">Congratulations &mdash; <?php echo count($results); ?> prize(s) found!</div>
 			<div class="table-wrap">
@@ -57,7 +65,7 @@
 
 	<p class="text-muted">
 		Just checking a few numbers? Try the simpler <a href="<?php echo base_url(); ?>search/checker/">Prize Bond Checker</a>,
-		or browse every draw in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
+		or browse the draws we hold in the <a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>.
 	</p>
 </div>
 

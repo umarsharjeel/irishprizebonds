@@ -44,7 +44,7 @@
 
 		<h2>Found an old bond and not sure what to do with it?</h2>
 		<p>
-			If you've come across a Prize Bond certificate &mdash; your own from years ago, or one belonging to somebody else &mdash; the first step is simply to check its number against our full draw history using <a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a> or <a href="<?php echo base_url(); ?>search/power/">Power Search</a> for a longer list. If you're not the registered holder and believe it may be unclaimed from a deceased estate, Ireland State Savings can also help trace a holding from a name and address even without the certificate to hand.
+			If you've come across a Prize Bond certificate &mdash; your own from years ago, or one belonging to somebody else &mdash; the first step is simply to check its number against the draws we hold using <a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a> or <a href="<?php echo base_url(); ?>search/power/">Power Search</a> for a longer list<?php if (!empty($coverage) && (int) $coverage->draws > 0): ?> (our results start on <?php echo date('j F Y', strtotime($coverage->first_date)); ?>, so a prize from an earlier draw won't show &mdash; Ireland State Savings can help with those)<?php endif; ?>. If you're not the registered holder and believe it may be unclaimed from a deceased estate, Ireland State Savings can also help trace a holding from a name and address even without the certificate to hand.
 		</p>
 
 		<h2>Read next</h2>

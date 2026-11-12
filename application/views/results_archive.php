@@ -3,10 +3,17 @@
 <div class="container">
 	<h1>Draw Archive</h1>
 	<p class="lead-paragraph">
-		Every Irish Prize Bond draw we track, in one place — something the official results page doesn't offer,
+		Every Irish Prize Bond draw we hold, in one place — something the official results page doesn't offer,
 		since it only ever shows one draw at a time. Click any date below for that draw's full winners list, or
 		jump to a monthly overview to see a whole month's draws side by side.
 	</p>
+	<?php if (!empty($coverage) && (int) $coverage->draws > 0): ?>
+		<p class="text-muted">
+			The archive currently covers <?php echo number_format($coverage->draws); ?> draws, from
+			<?php echo date('j F Y', strtotime($coverage->first_date)); ?> to <?php echo date('j F Y', strtotime($coverage->last_date)); ?>.
+			Draws before that aren't held here yet.
+		</p>
+	<?php endif; ?>
 
 	<?php
 	$months = array();

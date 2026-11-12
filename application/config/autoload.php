@@ -63,8 +63,9 @@ $autoload['packages'] = array();
 // never read or write session data. Only the dashboard (auth) controllers,
 // User_management (login), and Contact_us (flash messages) actually need
 // it — each of those loads it explicitly in its own constructor instead, so
-// public visitors get no cookie at all until they either use the contact
-// form or accept analytics consent.
+// public visitors get no session cookie at all unless they use the contact
+// form. (GA4's own cookies are separate — see website/head_scripts.php —
+// and are unaffected by this session-library setting either way.)
 $autoload['libraries'] = array('database');
 
 /*

@@ -36,13 +36,24 @@ class Results extends CI_Controller {
 		$data['recent'] = $this->db->select('draw_date, is_jackpot, total_prize_fund, total_prizes_count')
 			->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->limit(13)->get()->result();
 
+		// The winners list for the latest draw, prizes of EUR 1,000 and over (about 50
+		// rows). Searchers for "prize bond winners list" want the winning numbers; the
+		// full list of every prize (~10,000 rows) lives on the draw page itself.
+		$data['winners'] = $this->db->select('draw_winners.bond_number, draw_winners.prize_value, locations.name AS location', false)
+			->from('draw_winners')->join('locations', 'locations.id = draw_winners.location_id', 'left')
+			->where('draw_winners.draw_id', $latest->id)->where('draw_winners.prize_value >=', 1000)
+			->order_by('draw_winners.prize_value', 'desc')->order_by('draw_winners.bond_number', 'asc')
+			->limit(100)->get()->result();
+
 		$latest_label = date('j F Y', strtotime($latest->draw_date));
 		// Static title on purpose: this page's value is being a fixed target for
 		// "irish prize bond results", so the <title> must not churn week to week
 		// (and must stay distinct from the dated results/view/<date> title). The
 		// live draw date lives in the H1/body and meta description instead.
-		$data['title'] = 'Irish Prize Bond Results - Latest and Recent Draws | Irish Prize Bonds';
-		$data['description'] = 'Latest Irish Prize Bond results from the ' . $latest_label . ' draw, updated after every weekly draw, plus a list of recent draws and the full archive.';
+		// "Winners List" added 2026-11-12 as a measured test (Search Console showed
+		// ~780 impressions in 28 days for winners-list searches, almost no clicks).
+		$data['title'] = 'Irish Prize Bond Results and Winners List | Irish Prize Bonds';
+		$data['description'] = 'Irish Prize Bond results and winners list for the ' . $latest_label . ' draw, updated after every weekly draw, plus recent draws and the draw archive.';
 
 		$this->load->view('results_hub', $data);
 	}
@@ -51,6 +62,7 @@ class Results extends CI_Controller {
 	{
 		$data['draws'] = $this->db->select('id, draw_date, is_jackpot, total_prize_fund, total_prizes_count, published')
 			->from('draws')->order_by('draw_date', 'desc')->get()->result();
+		$data['coverage'] = get_archive_coverage($this->db);
 		$data['title'] = 'Prize Bond Draw Archive | Irish Prize Bonds';
 		$data['description'] = 'Browse past and upcoming Irish Prize Bond draws.';
 		$this->load->view('results_archive', $data);

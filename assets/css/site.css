@@ -340,6 +340,13 @@ table.data-table th {
 table.data-table tbody tr:hover { background: var(--color-primary-light); }
 table.data-table tbody tr:last-child td { border-bottom: none; }
 
+/* Opt-in: tighter side padding on phones so a three-column table (e.g. the hub's winners
+   list, where a long location name widens the last column) fits without sideways scrolling. */
+@media (max-width: 480px) {
+	table.data-table.data-table-compact th,
+	table.data-table.data-table-compact td { padding-left: 8px; padding-right: 8px; }
+}
+
 /* ---------- Forms ---------- */
 
 .form-row { margin-bottom: 14px; }

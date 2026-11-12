@@ -17,6 +17,11 @@ class Content extends CI_Controller {
 
 	public function faq()
 	{
+		$this->load->database();
+		$cov = get_archive_coverage($this->db);
+		$has_cov = $cov && (int) $cov->draws > 0;
+		$since = $has_cov ? date('j F Y', strtotime($cov->first_date)) : null;
+
 		$data['faqs'] = array(
 			array(
 				'q' => 'How often are Prize Bond draws held?',
@@ -40,11 +45,11 @@ class Content extends CI_Controller {
 			),
 			array(
 				'q' => 'How do I check if my numbers have won?',
-				'a' => 'Use our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool for up to 5 numbers at a time, or <a href="' . base_url() . 'search/power">Power Search</a> to paste a longer list. You can also browse every draw individually in the <a href="' . base_url() . 'results/archive">Draw Archive</a>.',
+				'a' => 'Use our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool for up to 5 numbers at a time, or <a href="' . base_url() . 'search/power">Power Search</a> to paste a longer list. You can also browse the draws we hold individually in the <a href="' . base_url() . 'results/archive">Draw Archive</a>.',
 			),
 			array(
 				'q' => 'Can I check old Prize Bonds online?',
-				'a' => 'Yes. Old Prize Bonds stay valid indefinitely and remain in every draw until they are cashed in, and unclaimed prizes never expire. Enter any bond number &mdash; however old &mdash; into our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool and it is matched against every published draw we hold. If you have lost the certificate for an old holding, the official <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a> site can trace it from your name and address.',
+				'a' => 'Yes, with one limit. Old Prize Bonds stay valid indefinitely and remain in every draw until they are cashed in, and unclaimed prizes never expire. Our <a href="' . base_url() . 'search/checker">Check Numbers</a> tool matches any bond number against the draws we hold' . ($has_cov ? ', which start on ' . $since : '') . ' &mdash; so a prize won in an earlier draw will not appear here. For earlier draws, and if you have lost the certificate for an old holding, the official <a href="https://www.statesavings.ie/prize-bonds" target="_blank" rel="noopener">statesavings.ie</a> site can help &mdash; it can trace a holding from your name and address.',
 			),
 			array(
 				'q' => 'What happens to Prize Bonds when the holder dies?',
@@ -60,7 +65,7 @@ class Content extends CI_Controller {
 			),
 			array(
 				'q' => 'How far back do your results go?',
-				'a' => "We're continuously building a historical archive of draw results. Check the <a href=\"" . base_url() . 'results/archive">Draw Archive</a> for the current range of draws covered.',
+				'a' => ($has_cov ? 'Our archive currently covers ' . number_format($cov->draws) . ' draws, from ' . $since . ' to ' . date('j F Y', strtotime($cov->last_date)) . '. Earlier draws are not held here yet, and the start date may move back if we add them. ' : '') . 'See the <a href="' . base_url() . 'results/archive">Draw Archive</a> for the current range of draws covered.',
 			),
 			array(
 				'q' => 'Are Irish Prize Bonds the same as UK Premium Bonds?',
@@ -91,8 +96,23 @@ class Content extends CI_Controller {
 
 	public function about()
 	{
+		$this->load->database();
+
+		// Who runs the site: only shown once application/config/publisher.php is filled in.
+		$this->config->load('publisher', TRUE, TRUE);
+		$data['publisher'] = array(
+			'name' => trim((string) $this->config->item('publisher_name', 'publisher')),
+			'location' => trim((string) $this->config->item('publisher_location', 'publisher')),
+			'about' => trim((string) $this->config->item('publisher_about', 'publisher')),
+			'email' => trim((string) $this->config->item('publisher_email', 'publisher')),
+		);
+
+		// The site in numbers, straight from the database (published draws only).
+		$data['facts'] = $this->db->select('COUNT(*) AS draws, MIN(draw_date) AS first_date, MAX(draw_date) AS last_date, SUM(total_prizes_count) AS prizes', false)
+			->from('draws')->where('published', 1)->get()->row();
+
 		$data['title'] = 'About | Irish Prize Bonds';
-		$data['description'] = 'About this independent Irish Prize Bond results checker.';
+		$data['description'] = 'About Irish Prize Bonds: who runs this independent results checker, where our data comes from, and how we handle corrections.';
 		$this->load->view('about', $data);
 	}
 
@@ -144,6 +164,8 @@ class Content extends CI_Controller {
 
 	public function unclaimed_and_inherited()
 	{
+		$this->load->database();
+		$data['coverage'] = get_archive_coverage($this->db);
 		$data['title'] = 'Unclaimed and Inherited Prize Bonds | Irish Prize Bonds';
 		$data['description'] = 'What happens to Prize Bonds when the holder dies, how to claim or trace inherited bonds, when a Grant of Probate is needed, and why old bonds never expire.';
 		$this->load->view('unclaimed_and_inherited', $data);
