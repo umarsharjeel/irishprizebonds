@@ -63,7 +63,7 @@
 						</table>
 					</div>
 					<?php endif; ?>
-					<a href="<?php echo base_url(); ?>results/view/<?php echo $last_draw->draw_date; ?>/" class="btn btn-default">See Full Results</a>
+					<a href="<?php echo base_url(); ?>results/view/<?php echo $last_draw->draw_date; ?>/" class="btn btn-default">See the full winners list</a>
 				<?php else: ?>
 					<p class="text-muted">Results are pending and will be updated soon.</p>
 					<a href="<?php echo base_url(); ?>results/view/<?php echo $last_draw->draw_date; ?>/" class="btn btn-default">View Status</a>
