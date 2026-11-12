@@ -64,7 +64,14 @@ class Results extends CI_Controller {
 			->from('draws')->order_by('draw_date', 'desc')->get()->result();
 		$data['coverage'] = get_archive_coverage($this->db);
 		$data['title'] = 'Prize Bond Draw Archive | Irish Prize Bonds';
-		$data['description'] = 'Browse past and upcoming Irish Prize Bond draws.';
+		// Names what is on the page and uses the real start date, so it can't overstate
+		// coverage and moves back by itself if earlier draws are added.
+		if ($data['coverage'] && (int) $data['coverage']->draws > 0) {
+			$data['description'] = 'Browse every Irish Prize Bond draw we hold, from ' . date('j F Y', strtotime($data['coverage']->first_date))
+				. ' to the latest: prize fund, prizes awarded and a monthly overview for each.';
+		} else {
+			$data['description'] = 'Browse past and upcoming Irish Prize Bond draws.';
+		}
 		$this->load->view('results_archive', $data);
 	}
 
