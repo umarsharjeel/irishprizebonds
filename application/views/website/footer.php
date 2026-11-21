@@ -8,6 +8,7 @@
 						<li><a href="<?php echo base_url(); ?>results/">Latest Results</a></li>
 						<li><a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a></li>
 						<li><a href="<?php echo base_url(); ?>schedule/">Draw Dates</a></li>
+						<li><a href="<?php echo base_url(); ?>news/">Jackpot Write-ups</a></li>
 						<li><a href="<?php echo base_url(); ?>search/checker/">Check My Numbers</a></li>
 						<li><a href="<?php echo base_url(); ?>search/power/">Power Search</a></li>
 					</ul>

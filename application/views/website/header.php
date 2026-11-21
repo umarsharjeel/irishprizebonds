@@ -62,6 +62,7 @@
 						<a href="<?php echo base_url(); ?>results/">Latest Results</a>
 						<a href="<?php echo base_url(); ?>results/archive/">Draw Archive</a>
 						<a href="<?php echo base_url(); ?>schedule/">Draw Dates</a>
+						<a href="<?php echo base_url(); ?>news/">Jackpot Write-ups</a>
 						<a href="<?php echo base_url(); ?>search/checker/">Check Numbers</a>
 						<a href="<?php echo base_url(); ?>search/power/">Power Search</a>
 					</div>

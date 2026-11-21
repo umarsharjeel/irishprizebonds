@@ -45,6 +45,32 @@ class Antelope extends CI_Model {
     return $xcrud->render();
   }
 
+  // Articles are created by Dashboard > Articles > Publish Jackpot Article (generated from
+  // the draw data), so there is no "add" here: this is for tidying them afterwards.
+  // Slug and draw link are read-only because changing them would break links already shared.
+  // Deleting an article lets the publish action generate it again from scratch.
+  public function posts($xcrud){
+    if (!$this->db->table_exists('posts')) {
+      return "<div class='alert alert-warning'>The <strong>posts</strong> table doesn't exist yet. Run <code>database/2026-11-posts.sql</code> on the database first (the SQL is also shown on the Publish Jackpot Article page).</div>";
+    }
+    $xcrud->table('posts')->order_by('published_at','desc');
+    $xcrud->columns('title,status,published_at');
+    $xcrud->fields('title,slug,summary,body,editor_note,status,published_at');
+    $xcrud->label('title','Title')->label('slug','URL slug')->label('summary','Meta description (aim for 155 characters or fewer)');
+    $xcrud->label('body','Article (HTML)')->label('editor_note',"Editor's note (shown under the article; plain text)");
+    $xcrud->label('status','Status')->label('published_at','Published');
+    $xcrud->change_type('status', 'select', 'published', array('published' => 'Published', 'draft' => 'Draft (hidden from the site)'));
+    // Plain textareas, not xCRUD's rich-text editor: the visual editor would strip the table classes
+    // and spacing the article relies on when it saves, and the editor's note is plain text anyway.
+    $xcrud->no_editor('body,editor_note');
+    $xcrud->readonly('slug');
+    $xcrud->validation_required('title');
+    $xcrud->unset_add();
+    $xcrud->unset_print();
+    $xcrud->unset_csv();
+    return $xcrud->render();
+  }
+
   public function locations($xcrud){
     $xcrud->table('locations')->order_by('name');
     $xcrud->unset_print();

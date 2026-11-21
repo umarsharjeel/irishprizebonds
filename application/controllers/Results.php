@@ -114,10 +114,160 @@ class Results extends CI_Controller {
 		$data['prev_month'] = $prev && $prev->ym ? $prev->ym : null;
 		$data['next_month'] = $next && $next->ym ? $next->ym : null;
 
+		$data['report'] = $this->_build_month_report($year_month, $draws, $data['prev_month']);
+		$data['coverage'] = get_archive_coverage($this->db);
+
 		$data['title'] = $month_label . ' Prize Bond Results | Irish Prize Bonds';
-		$data['description'] = 'All Irish Prize Bond draw results for ' . $month_label . ': draw dates, prize funds and winner counts.';
+		$data['description'] = $month_label . ' Irish Prize Bond results: ' . count($draws) . ' draw' . (count($draws) === 1 ? '' : 's')
+			. ', €' . number_format($total_fund) . ' paid out in ' . number_format($total_prizes) . ' prizes'
+			. (($data['report']['geo'] || !empty($data['report']['big_prizes'])) ? ', plus the biggest winners and where they came from.' : '.');
 
 		$this->load->view('results_month', $data);
+	}
+
+	/**
+	 * Data for a month's report: a summary of its draws, a like-for-like comparison
+	 * with the previous month (same prize structure only — see PRIZE_CHANGE_DATE), the
+	 * largest prizes, and where the winners were from. All of it is calculated from our
+	 * own tables, so every month's page is genuinely different. Winner-based sections
+	 * are left out (null / empty) when no winners have been imported for those draws.
+	 */
+	private function _build_month_report($ym, $draws, $prev_ym)
+	{
+		$r = array();
+		$ids = array();
+		$regular = array();
+		$jackpots = array();
+		foreach ($draws as $d) {
+			$ids[] = (int) $d->id;
+			if ($d->is_jackpot) {
+				$jackpots[] = $d;
+			} else {
+				$regular[] = $d;
+			}
+		}
+
+		$r['draw_count'] = count($draws);
+		$r['regular_count'] = count($regular);
+		$r['jackpot_count'] = count($jackpots);
+		$r['in_progress'] = ($ym === date('Y-m'));
+		$r['new_era'] = $draws[0]->draw_date >= PRIZE_CHANGE_DATE;
+		$r['jackpot'] = !empty($jackpots) ? $jackpots[count($jackpots) - 1] : null;
+		$r['jackpot_post'] = null;
+		if ($r['jackpot']) {
+			$this->load->model('post_model');
+			$r['jackpot_post'] = $this->post_model->published_for_draw($r['jackpot']->id);
+		}
+
+		$r['regular'] = null;
+		if (!empty($regular)) {
+			$funds = array();
+			$prizes = array();
+			foreach ($regular as $d) {
+				$funds[] = (float) $d->total_prize_fund;
+				$prizes[] = (int) $d->total_prizes_count;
+			}
+			$r['regular'] = array(
+				'fund_min' => min($funds), 'fund_max' => max($funds),
+				'fund_avg' => array_sum($funds) / count($funds),
+				'prizes_avg' => array_sum($prizes) / count($prizes),
+			);
+		}
+
+		// The previous month, for a like-for-like comparison.
+		$r['prev'] = null;
+		if ($prev_ym) {
+			$pd = $this->db->select('id, draw_date, is_jackpot, total_prize_fund, total_prizes_count')->from('draws')
+				->where('published', 1)->where("DATE_FORMAT(draw_date, '%Y-%m') =", $prev_ym)
+				->order_by('draw_date')->get()->result();
+			if (!empty($pd)) {
+				$p = array(
+					'label' => date('F Y', strtotime($prev_ym . '-01')),
+					'draws' => count($pd),
+					'same_era' => (($pd[0]->draw_date >= PRIZE_CHANGE_DATE) === $r['new_era']),
+					'reg_fund' => null, 'reg_prizes' => null,
+					'ids' => array(),
+				);
+				$pf = array();
+				$pp = array();
+				foreach ($pd as $x) {
+					$p['ids'][] = (int) $x->id;
+					if (!$x->is_jackpot) {
+						$pf[] = (float) $x->total_prize_fund;
+						$pp[] = (int) $x->total_prizes_count;
+					}
+				}
+				if (!empty($pf)) {
+					$p['reg_fund'] = array_sum($pf) / count($pf);
+					$p['reg_prizes'] = array_sum($pp) / count($pp);
+				}
+				$r['prev'] = $p;
+			}
+		}
+
+		// Whether this month holds the very first draws in the archive.
+		$cov = get_archive_coverage($this->db);
+		$r['archive_starts_here'] = ($cov && (int) $cov->draws > 0 && $draws[0]->draw_date === $cov->first_date);
+
+		// The largest prizes (EUR 50,000 and over: the regular top prize in either prize structure, and the jackpot).
+		$r['big_prizes'] = $this->db->select('draw_winners.bond_number, draw_winners.prize_value, draws.draw_date, locations.name AS location', false)
+			->from('draw_winners')->join('draws', 'draws.id = draw_winners.draw_id')
+			->join('locations', 'locations.id = draw_winners.location_id', 'left')
+			->where_in('draw_winners.draw_id', $ids)->where('draw_winners.prize_value >=', 50000)
+			->order_by('draws.draw_date', 'asc')->order_by('draw_winners.prize_value', 'desc')
+			->get()->result();
+
+		$cnt = $this->db->select('COUNT(*) AS n, SUM(prize_value >= 1000) AS big', false)->from('draw_winners')
+			->where_in('draw_id', $ids)->get()->row();
+		$r['winner_rows'] = (int) $cnt->n;
+		$r['big_count'] = (int) $cnt->big;
+
+		// Where the winners were from (prizes with a recorded location only), and the same for the
+		// previous month so the two can be compared.
+		$r['geo'] = $this->_month_geo($ids, $r['winner_rows']);
+		$r['prev_geo'] = ($r['prev'] && !empty($r['prev']['ids'])) ? $this->_month_geo($r['prev']['ids'], null) : null;
+
+		return $r;
+	}
+
+	/**
+	 * Where the prizes of a set of draws went, counting only prizes with a recorded location.
+	 * Returns null when no winners are recorded for them. $winner_rows (all winner rows for
+	 * these draws) is only needed to report how many prizes have no location.
+	 */
+	private function _month_geo($ids, $winner_rows)
+	{
+		$loc = $this->db->select('locations.name AS name, COUNT(*) AS n, SUM(draw_winners.prize_value >= 1000) AS big', false)
+			->from('draw_winners')->join('locations', 'locations.id = draw_winners.location_id')
+			->where_in('draw_winners.draw_id', $ids)
+			->group_by('draw_winners.location_id')->group_by('locations.name')
+			->order_by('n', 'desc')->order_by('locations.name', 'asc')
+			->get()->result();
+		$located = 0;
+		foreach ($loc as $l) {
+			$located += (int) $l->n;
+		}
+		if ($located === 0) {
+			return null;
+		}
+
+		$by_big = $loc;
+		usort($by_big, function ($a, $b) {
+			return ((int) $b->big <=> (int) $a->big) ?: strcmp($a->name, $b->name);
+		});
+		$big_top = array();
+		foreach (array_slice($by_big, 0, 3) as $l) {
+			if ((int) $l->big > 0) {
+				$big_top[] = $l;
+			}
+		}
+		return array(
+			'located' => $located,
+			'unlocated' => $winner_rows === null ? 0 : max(0, $winner_rows - $located),
+			'distinct' => count($loc),
+			'top' => array_slice($loc, 0, 5),
+			'big_top' => $big_top,
+		);
 	}
 
 	public function view($draw_date = null)
@@ -145,6 +295,12 @@ class Results extends CI_Controller {
 
 		$data['summary'] = $this->_build_draw_summary($draw, $tiers);
 		$data['analysis'] = $this->_build_draw_analysis($draw, $tiers);
+
+		$data['jackpot_post'] = null;
+		if ($draw->is_jackpot) {
+			$this->load->model('post_model');
+			$data['jackpot_post'] = $this->post_model->published_for_draw($draw->id);
+		}
 
 		$page = max(1, (int) $this->input->get('page'));
 		$search = trim((string) $this->input->get('q'));

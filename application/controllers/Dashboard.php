@@ -46,6 +46,67 @@ class Dashboard extends CI_Controller {
 		$this->load->view('footer', $data);
 	}
 
+	/**
+	 * Publishes the write-up for a monthly jackpot draw, unless one already exists.
+	 * The page opens on the latest published jackpot draw: if it has no article yet
+	 * the generated article is previewed here and one click publishes it. Earlier
+	 * jackpot draws can be picked from the list, one at a time on purpose; there is
+	 * no "publish everything" button, so articles only exist where someone looked
+	 * at the preview first.
+	 */
+	public function publish_jackpot_post()
+	{
+		$page = 'publish_jackpot_post';
+		$data['pageTitle'] = 'Publish Jackpot Article';
+		$data['active_menu'] = 'dashboard/publish_jackpot_post';
+
+		$this->load->model('post_model');
+		$permitted = is_page_permitted($page);
+
+		$data['table_ok'] = $this->post_model->table_exists();
+		$data['create_sql'] = Post_model::create_sql();
+		$data['result'] = null;
+
+		// Only act on a POST when this user may use the page (checked before anything is written).
+		if ($permitted && $data['table_ok'] && $this->input->post('do_publish')) {
+			$data['result'] = $this->post_model->publish_jackpot((int) $this->input->post('draw_id'));
+		}
+
+		$overview = $this->post_model->jackpot_overview();
+		$data['overview'] = $overview;
+
+		$selected = (int) $this->input->get('draw_id');
+		if (!$selected && $data['result']) {
+			$selected = (int) $this->input->post('draw_id');
+		}
+		if (!$selected && !empty($overview)) {
+			$selected = (int) $overview[0]->id;
+		}
+		$data['selected_id'] = $selected;
+		$data['selected'] = null;
+		foreach ($overview as $o) {
+			if ((int) $o->id === $selected) {
+				$data['selected'] = $o;
+			}
+		}
+		$data['preview'] = null;
+		if ($permitted && $data['selected'] && !$data['selected']->post) {
+			$data['preview'] = $this->post_model->generate_jackpot($selected);
+		}
+
+		$this->load->view('header', $data);
+		$data["menus"] = get_menus();
+		$this->load->view('sidebar', $data);
+
+		if ($permitted) {
+			$this->load->view('publish_jackpot_post', $data);
+		} else {
+			$this->load->view('not_permitted');
+		}
+
+		$this->load->view('footer', $data);
+	}
+
 	private function _process_winners_import()
 	{
 		$draw_id = (int) $this->input->post('draw_id');

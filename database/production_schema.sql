@@ -139,6 +139,29 @@ CREATE TABLE `cron_state` (
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+
+-- Write-ups generated from our own draw data (currently the monthly jackpot article;
+-- see Post_model and Dashboard::publish_jackpot_post). Also in database/2026-11-posts.sql.
+CREATE TABLE `posts` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `post_type` varchar(20) NOT NULL DEFAULT 'jackpot',
+  `draw_id` int unsigned DEFAULT NULL,
+  `slug` varchar(120) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `summary` varchar(255) NOT NULL DEFAULT '',
+  `body` mediumtext NOT NULL,
+  `editor_note` text,
+  `status` varchar(12) NOT NULL DEFAULT 'published',
+  `published_at` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  UNIQUE KEY `type_draw` (`post_type`,`draw_id`),
+  KEY `status_published` (`status`,`published_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

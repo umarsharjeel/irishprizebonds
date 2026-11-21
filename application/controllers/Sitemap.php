@@ -39,6 +39,9 @@ class Sitemap extends CI_Controller {
 
 		$draws = $this->db->select('draw_date, updated_at')->from('draws')->where('published', 1)->order_by('draw_date', 'desc')->get()->result();
 
+		$this->load->model('post_model');
+		$posts = $this->post_model->list_published(200);
+
 		$months = $this->db->query("SELECT DISTINCT DATE_FORMAT(draw_date, '%Y-%m') as ym FROM draws WHERE published = 1 ORDER BY ym DESC")->result();
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
@@ -47,6 +50,17 @@ class Sitemap extends CI_Controller {
 		foreach ($static_pages as $path => $priority) {
 			$loc = $path === '' ? base_url() : base_url($path . '/');
 			echo '<url><loc>' . $loc . '</loc><priority>' . $priority . '</priority></url>' . "\n";
+		}
+
+		if (!empty($posts)) {
+			echo '<url><loc>' . base_url('news/') . '</loc><priority>0.6</priority></url>' . "\n";
+			foreach ($posts as $p) {
+				echo '<url><loc>' . base_url('news/' . $p->slug . '/') . '</loc>';
+				if ($p->updated_at) {
+					echo '<lastmod>' . date('Y-m-d', strtotime($p->updated_at)) . '</lastmod>';
+				}
+				echo '<priority>0.6</priority></url>' . "\n";
+			}
 		}
 
 		foreach ($months as $m) {

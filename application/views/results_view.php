@@ -30,6 +30,10 @@
 		<p class="lead-paragraph"><?php echo $summary; ?></p>
 	<?php endif; ?>
 
+	<?php if (!empty($jackpot_post)): ?>
+		<p><a href="<?php echo base_url(); ?>news/<?php echo htmlspecialchars($jackpot_post->slug); ?>/"><strong>Read the write-up of this jackpot draw &raquo;</strong></a></p>
+	<?php endif; ?>
+
 	<div class="stat-grid" style="grid-template-columns: repeat(2,1fr); max-width:420px;">
 		<div class="stat-tile">
 			<div class="value">&euro;<?php echo number_format($draw->total_prize_fund); ?></div>
@@ -43,7 +47,7 @@
 
 	<h2>Prize Breakdown</h2>
 	<div class="table-wrap" style="max-width:500px;">
-		<table class="data-table">
+		<table class="data-table data-table-compact">
 			<thead>
 				<tr><th>Prize Value</th><th>Number of Prizes</th><th>Value</th></tr>
 			</thead>
@@ -163,7 +167,7 @@ $eur = function ($n) { return '&euro;' . number_format(abs($n)); };
 			<?php endif; ?>
 		</p>
 		<div class="table-wrap" style="max-width:500px;">
-			<table class="data-table">
+			<table class="data-table data-table-compact">
 				<thead><tr><th>Location</th><th>Prizes</th><th>Share</th></tr></thead>
 				<tbody>
 					<?php foreach ($g['top'] as $loc): ?>
@@ -234,9 +238,9 @@ $eur = function ($n) { return '&euro;' . number_format(abs($n)); };
 	<p class="text-muted"><?php echo number_format($total_rows); ?> prizes shown</p>
 
 	<div class="table-wrap">
-		<table class="data-table">
+		<table class="data-table data-table-compact">
 			<thead>
-				<tr><th>Prize Value</th><th>Winning Prize Bond</th><th>Location</th></tr>
+				<tr><th>Prize</th><th>Winning Bond</th><th>Location</th></tr>
 			</thead>
 			<tbody>
 				<?php if (empty($winners)): ?>

@@ -42,6 +42,23 @@
     ]
   },
   {
+    "title": "Articles",
+    "icon": "mdi mdi-newspaper",
+    "url": null,
+    "sub_menus": [
+      {
+        "title": "Publish Jackpot Article",
+        "icon": "",
+        "url": "dashboard/publish_jackpot_post"
+      },
+      {
+        "title": "All Articles",
+        "icon": "",
+        "url": "dashboard/table/posts"
+      }
+    ]
+  },
+  {
     "title": "Locations",
     "icon": "mdi mdi-map-marker",
     "url": "dashboard/table/locations",

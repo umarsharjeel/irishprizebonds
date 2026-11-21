@@ -84,9 +84,9 @@
 
 	<h2>Recent Draws</h2>
 	<div class="table-wrap">
-		<table class="data-table">
+		<table class="data-table data-table-compact">
 			<thead>
-				<tr><th>Draw Date</th><th>Prize Fund</th><th>Prizes</th><th></th></tr>
+				<tr><th>Draw Date</th><th>Prize Fund</th><th>Prizes</th><th class="hide-xs"></th></tr>
 			</thead>
 			<tbody>
 				<?php foreach ($recent as $d): ?>
@@ -97,7 +97,7 @@
 						</td>
 						<td>&euro;<?php echo number_format($d->total_prize_fund); ?></td>
 						<td><?php echo number_format($d->total_prizes_count); ?></td>
-						<td><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/" class="btn btn-default btn-sm">View</a></td>
+						<td class="hide-xs"><a href="<?php echo base_url(); ?>results/view/<?php echo $d->draw_date; ?>/" class="btn btn-default btn-sm">View</a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
