@@ -282,6 +282,9 @@ class Post_model extends CI_Model {
 		$p = 'The draw awarded ' . number_format($draw->total_prizes_count) . ' prizes with a total prize fund of ' . $eur($draw->total_prize_fund)
 			. ', which includes the extra ' . $eur(self::JACKPOT_PRIZE) . ' jackpot.';
 
+		// Set below only when every winner of the top weekly prize is in our data and one of them
+		// is in the jackpot county (used by the "Worth noting" section).
+		$weekly_fact = null;
 		$weekly_top = null;
 		foreach ($tiers as $t) {
 			if ((float) $t->prize_value < self::JACKPOT_PRIZE) {
@@ -299,12 +302,16 @@ class Post_model extends CI_Model {
 			$total_rows = 0;
 			$all_located = true;
 			$names = array();
+			$county_hits = 0;
 			foreach ($rows as $r) {
 				$total_rows += (int) $r->n;
 				if ($r->name === null) {
 					$all_located = false;
 				} else {
 					$names[] = $e($r->name) . ((int) $r->n > 1 ? ' (' . (int) $r->n . ')' : '');
+					if (strcasecmp($r->name, $county) === 0) {
+						$county_hits = (int) $r->n;
+					}
 				}
 			}
 			$p .= ' Besides the jackpot, the top weekly prize of ' . $eur($weekly_top->prize_value) . ' went to '
@@ -312,6 +319,9 @@ class Post_model extends CI_Model {
 			// Only name the counties when every one of those winners is in our data, so the list can't be partial.
 			if ($total_rows === $cnt && $all_located && !empty($names)) {
 				$p .= ', listed under ' . $list($names);
+				if ($county_hits > 0) {
+					$weekly_fact = array('value' => $weekly_top->prize_value, 'cnt' => $cnt, 'hits' => $county_hits);
+				}
 			}
 			$p .= '.';
 		}
@@ -426,6 +436,90 @@ class Post_model extends CI_Model {
 				$h[] = '<h2>Compared with the previous jackpot draw</h2>';
 				$h[] = '<p>The Prize Bond fund and prize tiers were increased from 1 September 2026, so earlier jackpot draws can\'t be compared directly with this one. See <a href="/stats/prize-fund/">Prize Fund Trends</a> for the before-and-after.</p>';
 			}
+		}
+
+		// --- Worth noting ---------------------------------------------
+		// Short facts that are only included when they are actually true for this draw, so the
+		// section (and the article) differs from month to month because the data does. Each one
+		// is worked out from our own tables and is left out when there isn't enough to say it.
+		$facts = array();
+
+		// 1. The jackpot county also took the draw's top weekly prize.
+		if ($weekly_fact) {
+			$wv = $eur($weekly_fact['value']);
+			if ($weekly_fact['cnt'] === 1) {
+				$facts[] = $e($county) . ' also won the draw\'s top weekly prize of ' . $wv . ', so the county took both of the biggest prizes in this draw.';
+			} else {
+				$of = ($weekly_fact['hits'] === $weekly_fact['cnt']) ? 'all ' . $weekly_fact['cnt']
+					: ($weekly_fact['hits'] === 1 ? 'one of the ' . $weekly_fact['cnt'] : $weekly_fact['hits'] . ' of the ' . $weekly_fact['cnt']);
+				$facts[] = $e($county) . ' also won ' . $of . ' top weekly prizes of ' . $wv . ' in this draw.';
+			}
+		}
+
+		// 2. Back-to-back wins, or how long since this county's previous jackpot.
+		for ($i = 1; $i < $m; $i++) {
+			if ($hist[$i]->location !== null && strcasecmp($hist[$i]->location, $county) === 0) {
+				$when = date('j F Y', strtotime($hist[$i]->draw_date));
+				$facts[] = ($i === 1)
+					? $e($county) . ' also won the previous jackpot, on ' . $when . ', so the county has now won back-to-back jackpots.'
+					: 'The previous jackpot win listed under ' . $e($county) . ' was on ' . $when . ', ' . $i . ' jackpot draws earlier.';
+				break;
+			}
+		}
+
+		// 3 + 4. Highest / lowest prize fund and prize count among comparable jackpot draws
+		// (same side of the prize increase, up to and including this draw; only when no other draw ties).
+		$rk = $this->db->query(
+			"SELECT COUNT(*) AS n,
+			        SUM(total_prize_fund > ?) AS fund_above, SUM(total_prize_fund < ?) AS fund_below, SUM(total_prize_fund = ?) AS fund_equal,
+			        SUM(total_prizes_count > ?) AS pr_above, SUM(total_prizes_count < ?) AS pr_below, SUM(total_prizes_count = ?) AS pr_equal
+			 FROM draws WHERE published = 1 AND is_jackpot = 1 AND total_prize_fund > 0 AND draw_date <= ? AND draw_date " . ($new_era ? '>=' : '<') . ' ?',
+			array($draw->total_prize_fund, $draw->total_prize_fund, $draw->total_prize_fund,
+			      $draw->total_prizes_count, $draw->total_prizes_count, $draw->total_prizes_count,
+			      $draw->draw_date, PRIZE_CHANGE_DATE)
+		)->row();
+		if ($rk && (int) $rk->n >= 3) {
+			$pool = 'the ' . (int) $rk->n . ' jackpot draws we hold ' . ($new_era ? 'since' : 'before') . ' the 1 September 2026 prize increase';
+			if ((int) $rk->fund_equal === 1 && (int) $rk->fund_above === 0) {
+				$facts[] = 'At ' . $eur($draw->total_prize_fund) . ', this was the highest total prize fund of ' . $pool . '.';
+			} elseif ((int) $rk->fund_equal === 1 && (int) $rk->fund_below === 0) {
+				$facts[] = 'At ' . $eur($draw->total_prize_fund) . ', this was the lowest total prize fund of ' . $pool . '.';
+			}
+			if ((int) $rk->pr_equal === 1 && (int) $rk->pr_above === 0) {
+				$facts[] = 'With ' . number_format($draw->total_prizes_count) . ' prizes, this was the most of ' . $pool . '.';
+			} elseif ((int) $rk->pr_equal === 1 && (int) $rk->pr_below === 0) {
+				$facts[] = 'With ' . number_format($draw->total_prizes_count) . ' prizes, this was the fewest of ' . $pool . '.';
+			}
+		}
+
+		// 5. Which locations have won the most jackpots so far.
+		if ($m >= 4) {
+			$tally = array();
+			$label = array();
+			foreach ($hist as $r) {
+				if ($r->location === null) {
+					continue;
+				}
+				$key = strtolower($r->location);
+				$tally[$key] = isset($tally[$key]) ? $tally[$key] + 1 : 1;
+				$label[$key] = $r->location;
+			}
+			if (!empty($tally) && max($tally) >= 2) {
+				$top_n = max($tally);
+				$lead = array();
+				foreach ($tally as $key => $n) {
+					if ($n === $top_n) {
+						$lead[] = $e($label[$key]);
+					}
+				}
+				sort($lead);
+				$facts[] = 'Most jackpot wins so far in the draws we hold: ' . $list($lead) . ' (' . $top_n . (count($lead) > 1 ? ' each' : '') . ').';
+			}
+		}
+
+		if (!empty($facts)) {
+			$h[] = '<h2>Worth noting</h2>';
+			$h[] = '<ul><li>' . implode('</li><li>', $facts) . '</li></ul>';
 		}
 
 		// --- How the jackpot works ------------------------------------
